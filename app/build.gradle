@@ -46,6 +46,7 @@ dependencies {
     implementation deps.constraint_layout
 
     implementation deps.glide.runtime
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.glide.compiler
 
     implementation deps.retrofit.runtime
@@ -62,6 +63,9 @@ dependencies {
     kapt deps.hilt.viewmodel_complier
     androidTestImplementation deps.hilt.test
     kaptAndroidTest deps.hilt.test_kotlin
+
+    implementation deps.navigation.fragment
+    implementation deps.navigation.ui
 
     testImplementation deps.junit
     androidTestImplementation deps.ext_junit
