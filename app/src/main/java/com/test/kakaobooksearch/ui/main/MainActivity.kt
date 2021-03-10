@@ -1,6 +1,9 @@
 package com.test.kakaobooksearch.ui.main
 
+import android.content.res.Resources
+import android.util.Log
 import androidx.activity.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import com.test.kakaobooksearch.BR
 import com.test.kakaobooksearch.R
 import com.test.kakaobooksearch.base.BaseActivity
@@ -14,8 +17,19 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
     override val viewModelVariable: Int
         get() = BR.vm
 
+
     override fun start() {
-        TODO("Not yet implemented")
+        val host: NavHostFragment = supportFragmentManager
+            .findFragmentById(R.id.main_nav_host_fragment) as NavHostFragment? ?: return
+        val navController = host.navController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val dest: String = try {
+                resources.getResourceName(destination.id)
+            } catch (e: Resources.NotFoundException) {
+                destination.id.toString()
+            }
+            Log.d("NavigationActivity", "Navigated to $dest")
+        }
     }
 
 }

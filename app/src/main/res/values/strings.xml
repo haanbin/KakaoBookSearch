@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">KaKaoBookSearch</string>
-    <string name="str_search_hint">책 이름을 입력하세요</string>
+    <string name="search_hint">책 이름을 입력하세요</string>
+    <string name="book">book</string>
+    <string name="search">Search</string>
 </resources>
