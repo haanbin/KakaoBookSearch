@@ -14,7 +14,4 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, SearchViewModel>(R.la
     override val viewModelVariable: Int
         get() = BR.vm
 
-    override fun start() {
-
-    }
 }

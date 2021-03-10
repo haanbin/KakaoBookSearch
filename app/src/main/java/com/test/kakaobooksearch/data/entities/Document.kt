@@ -7,7 +7,7 @@ data class Document(
     val contents: String,
     val datetime: String,
     val isbn: String,
-    val price: Int,
+    val price: String,
     val publisher: String,
     @SerializedName("sale_price")
     val salePrice: Int,
@@ -16,4 +16,6 @@ data class Document(
     val title: String,
     val translators: List<String>,
     val url: String
-)
+) {
+    val isLike: Boolean = false
+}

@@ -9,6 +9,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 
 abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
     @LayoutRes
@@ -24,22 +25,23 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, layoutRes, container,false)
-        with(binding){
+        binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
+        with(binding) {
             lifecycleOwner = viewLifecycleOwner
             setVariable(viewModelVariable, viewModel)
         }
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        start()
+    protected fun onBaseObserve() {
+        viewModel.showToast.observe(this, Observer { event ->
+            event.getContentIfNotHandled()?.let {
+                showToast(it)
+            }
+        })
     }
 
-    fun showToast(msg: String) {
+    private fun showToast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
-
-    abstract fun start()
 }

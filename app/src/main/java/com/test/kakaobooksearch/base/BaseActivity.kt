@@ -23,12 +23,6 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel>(
             lifecycleOwner = this@BaseActivity
             setVariable(viewModelVariable, viewModel)
         }
-        start()
     }
 
-    fun showToast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-    }
-
-    abstract fun start()
 }

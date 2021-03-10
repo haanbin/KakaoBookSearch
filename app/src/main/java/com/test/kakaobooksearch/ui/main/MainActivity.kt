@@ -1,6 +1,7 @@
 package com.test.kakaobooksearch.ui.main
 
 import android.content.res.Resources
+import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -17,8 +18,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
     override val viewModelVariable: Int
         get() = BR.vm
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        start()
+    }
 
-    override fun start() {
+    private fun start() {
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.main_nav_host_fragment) as NavHostFragment? ?: return
         val navController = host.navController
