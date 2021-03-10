@@ -33,8 +33,13 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
         return binding.root
     }
 
-    protected fun onBaseObserve() {
-        viewModel.showToast.observe(this, Observer { event ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onBaseObserve()
+    }
+
+    private fun onBaseObserve() {
+        viewModel.showToast.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 showToast(it)
             }

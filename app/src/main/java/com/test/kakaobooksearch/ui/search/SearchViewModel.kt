@@ -38,10 +38,11 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     fun searchImageClicked() {
         if (searchKeyword.value.isNullOrEmpty()) {
             onShowToast("키워드를 입력해주세요")
+            setResetData()
             return
         }
         searchKeyword.value?.let {
-            setResetData(reqModel)
+            setResetData()
             setSearchKeyword(it)
             getSearchBooks()
         }
@@ -49,7 +50,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 도서 검색하기
     private fun getSearchBooks() {
-        getSearchBooksUseCase(getReqModelToMap(reqModel))
+        getSearchBooksUseCase(getReqModelToMap())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
                 if (response.isSuccessful) {
@@ -60,7 +61,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                         }
                         if (it.meta.totalCount == 0) {
                             onShowToast("검색결과가 존재하지 않습니다.")
-                            setResetData(reqModel)
+                            setResetData()
                         } else {
                             val itemList = (_documents.value ?: listOf()).toMutableList()
                             itemList.addAll(it.documents)
@@ -91,7 +92,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     }
 
     // reqModel reset
-    private fun setResetData(reqModel: KakaoBookReqModel) {
+    private fun setResetData() {
         reqModel.page = Constants.DEFAULT_PAGE_VALUE
         val itemList = (_documents.value ?: listOf()).toMutableList()
         if (itemList.isNotEmpty()) {
@@ -101,7 +102,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     }
 
     // convert 데이터 모델 to MAP
-    private fun getReqModelToMap(reqModel: KakaoBookReqModel): Map<String, String> {
+    private fun getReqModelToMap(): Map<String, String> {
         val map = hashMapOf<String, String>()
         map[Constants.QUERY] = reqModel.query
         map[Constants.PAGE] = reqModel.page.toString()
