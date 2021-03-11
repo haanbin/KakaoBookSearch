@@ -70,6 +70,8 @@ dependencies {
     implementation deps.navigation.fragment
     implementation deps.navigation.ui
 
+    implementation deps.timber
+
     testImplementation deps.junit
     androidTestImplementation deps.ext_junit
     androidTestImplementation deps.esspresso_core

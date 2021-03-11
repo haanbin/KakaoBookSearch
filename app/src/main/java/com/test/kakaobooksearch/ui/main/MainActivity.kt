@@ -10,6 +10,7 @@ import com.test.kakaobooksearch.R
 import com.test.kakaobooksearch.base.BaseActivity
 import com.test.kakaobooksearch.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main) {
@@ -33,7 +34,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
             } catch (e: Resources.NotFoundException) {
                 destination.id.toString()
             }
-            Log.d("NavigationActivity", "Navigated to $dest")
+            Timber.d("Navigated to $dest")
         }
     }
 

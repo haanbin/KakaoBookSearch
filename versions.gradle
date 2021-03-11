@@ -19,6 +19,7 @@ versions.retrofit = "2.9.0"
 versions.rx_android = "2.1.1"
 versions.rx_kotlin = "2.4.0"
 versions.test_junit = '1.1.1'
+versions.timber = '4.7.1'
 ext.versions = versions
 
 def build_versions = [:]
@@ -78,6 +79,8 @@ deps.retrofit = retrofit
 deps.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
 
 deps.rx_kotlin = "io.reactivex.rxjava2:rxkotlin:$versions.rx_kotlin"
+
+deps.timber = "com.jakewharton.timber:timber:$versions.timber"
 
 ext.deps = deps
 
