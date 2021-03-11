@@ -10,7 +10,7 @@ import javax.inject.Inject
 class RemoteDataSourceImpl @Inject constructor(private val retrofitService: RetrofitService) :
     RemoteDataSource {
 
-    override fun getSearchBooks(queryMap: Map<String, String>): Single<Response<KakaoBook>> =
+    override fun getSearchBooks(queryMap: Map<String, String>): Single<KakaoBook> =
         retrofitService.getSearchBooks(queryMap)
             .subscribeOn(Schedulers.io())
 }

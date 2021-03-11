@@ -12,6 +12,6 @@ interface RetrofitService {
     fun getSearchBooks(
         @QueryMap
         queryMap: Map<String, String>
-    ): Single<Response<KakaoBook>>
+    ): Single<KakaoBook>
 
 }

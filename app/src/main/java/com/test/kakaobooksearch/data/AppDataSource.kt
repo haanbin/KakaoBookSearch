@@ -8,5 +8,5 @@ interface AppDataSource {
 
     fun getSearchBooks(
         queryMap: Map<String, String>
-    ): Single<Response<KakaoBook>>
+    ): Single<KakaoBook>
 }

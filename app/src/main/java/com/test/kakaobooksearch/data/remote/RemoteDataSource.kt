@@ -8,5 +8,5 @@ interface RemoteDataSource {
 
     fun getSearchBooks(
         queryMap: Map<String, String>
-    ): Single<Response<KakaoBook>>
+    ): Single<KakaoBook>
 }

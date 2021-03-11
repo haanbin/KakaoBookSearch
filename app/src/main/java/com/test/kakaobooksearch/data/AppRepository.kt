@@ -15,6 +15,6 @@ class AppRepository @Inject constructor(
 ) :
     AppDataSource {
 
-    override fun getSearchBooks(queryMap: Map<String, String>): Single<Response<KakaoBook>> =
+    override fun getSearchBooks(queryMap: Map<String, String>): Single<KakaoBook> =
         remoteDataSource.getSearchBooks(queryMap)
 }
