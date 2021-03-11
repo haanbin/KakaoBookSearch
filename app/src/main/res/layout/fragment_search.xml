@@ -29,11 +29,11 @@
 
             <EditText
                 android:id="@+id/search_search_editText"
+                style="@style/AppEditText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:background="@null"
                 android:gravity="center_vertical"
                 android:hint="@string/search_hint"
                 android:imeOptions="actionSearch"
@@ -67,8 +67,8 @@
             app:layout_constraintVertical_bias="0"
             bind:documentData="@{vm.documents}"
             bind:onLoad="@{vm.onLoad}"
-            bind:threshold="@{10}"
             bind:searchRecyclerViewAttrTest="@{vm}"
+            bind:threshold="@{10}"
             tools:itemCount="2"
             tools:listitem="@layout/item_search" />
     </androidx.constraintlayout.widget.ConstraintLayout>
