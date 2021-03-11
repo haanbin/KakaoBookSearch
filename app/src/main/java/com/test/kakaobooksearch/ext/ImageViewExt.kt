@@ -6,7 +6,9 @@ import com.bumptech.glide.Glide
 
 @BindingAdapter("bind:imageUrl")
 fun ImageView.setImageUrl(url: String?) {
-    url.apply {
-        Glide.with(context).load(url).into(this@setImageUrl)
+    url?.let {
+        if (it.isNotEmpty()) {
+            Glide.with(context).load(url).into(this@setImageUrl)
+        }
     }
 }

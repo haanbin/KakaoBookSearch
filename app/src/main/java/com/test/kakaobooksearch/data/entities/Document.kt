@@ -12,7 +12,7 @@ data class Document(
     val price: String,
     val publisher: String,
     @SerializedName("sale_price")
-    val salePrice: Int,
+    val salePrice: String,
     val status: String,
     val thumbnail: String,
     val title: String,
@@ -28,7 +28,7 @@ data class Document(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.readInt(),
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -44,7 +44,7 @@ data class Document(
         parcel.writeString(isbn)
         parcel.writeString(price)
         parcel.writeString(publisher)
-        parcel.writeInt(salePrice)
+        parcel.writeString(salePrice)
         parcel.writeString(status)
         parcel.writeString(thumbnail)
         parcel.writeString(title)
