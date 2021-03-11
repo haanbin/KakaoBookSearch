@@ -3,8 +3,7 @@ package com.test.kakaobooksearch.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.test.kakaobooksearch.Event
-import com.test.kakaobooksearch.data.entities.Document
+import com.test.kakaobooksearch.util.Event
 import io.reactivex.disposables.CompositeDisposable
 
 abstract class BaseViewModel: ViewModel() {

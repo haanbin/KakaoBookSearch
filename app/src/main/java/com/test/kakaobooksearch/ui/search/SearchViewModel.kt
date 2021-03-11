@@ -3,7 +3,7 @@ package com.test.kakaobooksearch.ui.search
 import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.test.kakaobooksearch.Event
+import com.test.kakaobooksearch.util.Event
 import com.test.kakaobooksearch.base.BaseViewModel
 import com.test.kakaobooksearch.base.Constants
 import com.test.kakaobooksearch.data.entities.Document

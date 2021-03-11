@@ -3,7 +3,7 @@ package com.test.kakaobooksearch.ui.book
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import com.test.kakaobooksearch.Event
+import com.test.kakaobooksearch.util.Event
 import com.test.kakaobooksearch.base.BaseViewModel
 import com.test.kakaobooksearch.data.entities.Document
 import dagger.hilt.android.lifecycle.HiltViewModel
