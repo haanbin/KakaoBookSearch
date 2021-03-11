@@ -66,36 +66,29 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     }
 
     // 리스트 아이템 클릭
-    fun onBookItemClicked(document: Document){
+    fun onBookItemClicked(document: Document) {
         _openBookDetail.value = Event(document)
     }
 
     // 도서 검색하기
     private fun getSearchBooks(isAuto: Boolean?) {
-        getSearchBooksUseCase(getReqModelToMap())
+        getSearchBooksUseCase(reqModel.toMap())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    body?.let {
-                        if (reqModel.page == 1) {
-                            nowTotalCount = it.meta.totalCount
-                        }
-                        if (it.meta.totalCount == 0) {
-                            isAuto?.let { flag ->
-                                if (!flag) {
-                                    onShowToast("검색결과가 존재하지 않습니다.")
-                                }
-                            }
-                            setResetData()
-                        } else {
-                            val itemList = (_documents.value ?: listOf()).toMutableList()
-                            itemList.addAll(it.documents)
-                            _documents.value = itemList
+            .subscribe({
+                if (reqModel.page == 1) {
+                    nowTotalCount = it.meta.totalCount
+                }
+                if (it.meta.totalCount == 0) {
+                    isAuto?.let { flag ->
+                        if (!flag) {
+                            onShowToast("검색결과가 존재하지 않습니다.")
                         }
                     }
+                    setResetData()
                 } else {
-                    onShowToast("예기치 못한 오류가 발생하였습니다.")
+                    val itemList = (_documents.value ?: listOf()).toMutableList()
+                    itemList.addAll(it.documents)
+                    _documents.value = itemList
                 }
             }, {
                 it.message?.let { msg ->
@@ -136,14 +129,5 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
             itemList.clear()
             _documents.value = itemList
         }
-    }
-
-    // convert 데이터 모델 to MAP
-    private fun getReqModelToMap(): Map<String, String> {
-        val map = hashMapOf<String, String>()
-        map[Constants.QUERY] = reqModel.query
-        map[Constants.PAGE] = reqModel.page.toString()
-        map[Constants.SIZE] = reqModel.size.toString()
-        return map
     }
 }
