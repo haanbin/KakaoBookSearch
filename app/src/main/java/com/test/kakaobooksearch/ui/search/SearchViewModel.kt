@@ -10,6 +10,8 @@ import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.data.entities.KakaoBookReqModel
 import com.test.kakaobooksearch.domain.GetSearchBooksUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
@@ -68,6 +70,20 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     // 리스트 아이템 클릭
     fun onBookItemClicked(document: Document) {
         _openBookDetail.value = Event(document)
+    }
+
+    // 상세 정보 반영 (좋아요)
+    fun setDocumentChangeProcess(document: Document) {
+        _documents.value?.let {
+            val itemList = it.toMutableList()
+            for (index in itemList.indices) {
+                if (itemList[index].isbn == document.isbn) {
+                    itemList[index] = document
+                    _documents.value = itemList
+                    return@let
+                }
+            }
+        }
     }
 
     // 도서 검색하기

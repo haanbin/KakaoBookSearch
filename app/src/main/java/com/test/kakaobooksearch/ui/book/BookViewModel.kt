@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class BookViewModel @Inject constructor(private val handle: SavedStateHandle) : BaseViewModel() {
+class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewModel() {
 
     private val _document = MutableLiveData<Document>()
     val document: LiveData<Document>
@@ -19,6 +19,10 @@ class BookViewModel @Inject constructor(private val handle: SavedStateHandle) : 
     private val _backAction = MutableLiveData<Event<Unit>>()
     val backAction: LiveData<Event<Unit>>
         get() = _backAction
+
+    private val _changeDocumentAction = MutableLiveData<Event<Document>>()
+    val changeDocumentAction: LiveData<Event<Document>>
+        get() = _changeDocumentAction
 
     init {
         val document = handle.get("document") as? Document
@@ -35,6 +39,7 @@ class BookViewModel @Inject constructor(private val handle: SavedStateHandle) : 
         _document.value?.let {
             it.isLike = !it.isLike
             _document.value = it
+            _changeDocumentAction.value = Event(it)
         }
     }
 
