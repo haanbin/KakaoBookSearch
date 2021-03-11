@@ -19,5 +19,9 @@
         android:id="@+id/book_dest"
         android:name="com.test.kakaobooksearch.ui.book.BookFragment"
         android:label="@string/book"
-        tools:layout="@layout/fragment_book" />
+        tools:layout="@layout/fragment_book">
+        <argument
+            android:name="document"
+            app:argType="com.test.kakaobooksearch.data.entities.Document" />
+    </fragment>
 </navigation>

@@ -10,27 +10,36 @@ import com.test.kakaobooksearch.ui.search.SearchViewModel
 import com.test.kakaobooksearch.util.EndlessRecyclerViewScrollListener
 
 
-@BindingAdapter("bind:searchRecyclerViewAttrTest", "bind:onLoad")
-fun RecyclerView.setUserRecyclerViewAttrTest(viewModel: BaseViewModel, onLoad: (() -> Unit)?) {
-    if (viewModel is SearchViewModel) {
-        this.itemAnimator = null
-        val layoutManager = LinearLayoutManager(context)
-        adapter = SearchAdapter(viewModel)
-        this.layoutManager = layoutManager
-        onLoad?.let {
-            addOnScrollListener(
-                EndlessRecyclerViewScrollListener(
-                    layoutManager,
-                    8,
-                    it
-                )
-            )
-        }
+@BindingAdapter(
+    "bind:searchRecyclerViewAttrTest",
+    "bind:documentData"
+)
+fun RecyclerView.setUserRecyclerViewAttrTest(
+    viewModel: SearchViewModel,
+    documents: List<Document>?
+) {
+    itemAnimator = null
+    val adapter = adapter as? SearchAdapter ?: SearchAdapter(viewModel).also {
+        this.adapter = it
+    }
+    documents?.let {
+        adapter.setData(it)
     }
 }
 
-@BindingAdapter("bind:documentData")
-fun RecyclerView.setUserData(userFormats: List<Document>?) {
-    val userAdapter = adapter as? SearchAdapter
-    userFormats?.let { userAdapter?.setData(it) }
+@BindingAdapter(
+    "bind:onLoad",
+    "bind:threshold"
+)
+fun RecyclerView.setLoadMore(onLoad: (() -> Unit)?, threshold: Int) {
+    val layoutManager = this.layoutManager ?: LinearLayoutManager(context)
+    onLoad?.let {
+        addOnScrollListener(
+            EndlessRecyclerViewScrollListener(
+                layoutManager,
+                threshold,
+                it
+            )
+        )
+    }
 }

@@ -1,7 +1,9 @@
 package com.test.kakaobooksearch.ui.search
 
+import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.test.kakaobooksearch.Event
 import com.test.kakaobooksearch.base.BaseViewModel
 import com.test.kakaobooksearch.base.Constants
 import com.test.kakaobooksearch.data.entities.Document
@@ -20,6 +22,14 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     val documents: LiveData<List<Document>>
         get() = _documents
 
+    private val _hideKeyboard = MutableLiveData<Event<Unit>>()
+    val hideKeyboard: LiveData<Event<Unit>>
+        get() = _hideKeyboard
+
+    private val _openBookDetail = MutableLiveData<Event<Document>>()
+    val openBookDetail: LiveData<Event<Document>>
+        get() = _openBookDetail
+
     //two way binding
     val searchKeyword = MutableLiveData<String>()
 
@@ -30,26 +40,38 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     val onLoad = {
         if (isNeedLoadMore()) {
             setPageUp()
-            getSearchBooks()
+            getSearchBooks(null)
         }
     }
 
     // 검색 이미지 클릭
     fun searchImageClicked() {
-        if (searchKeyword.value.isNullOrEmpty()) {
-            onShowToast("키워드를 입력해주세요")
-            setResetData()
-            return
+        _hideKeyboard.value = Event(Unit)
+        onSearchProcess(searchKeyword.value, false)
+    }
+
+    // 키보드 검색 처리
+    fun onEditorAction(actionId: Int): Boolean {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            _hideKeyboard.value = Event(Unit)
+            onSearchProcess(searchKeyword.value, false)
+            return true
         }
-        searchKeyword.value?.let {
-            setResetData()
-            setSearchKeyword(it)
-            getSearchBooks()
-        }
+        return false
+    }
+
+    // editText 감지
+    fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        onSearchProcess(s.toString(), true)
+    }
+
+    // 리스트 아이템 클릭
+    fun onBookItemClicked(document: Document){
+        _openBookDetail.value = Event(document)
     }
 
     // 도서 검색하기
-    private fun getSearchBooks() {
+    private fun getSearchBooks(isAuto: Boolean?) {
         getSearchBooksUseCase(getReqModelToMap())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ response ->
@@ -60,7 +82,11 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                             nowTotalCount = it.meta.totalCount
                         }
                         if (it.meta.totalCount == 0) {
-                            onShowToast("검색결과가 존재하지 않습니다.")
+                            isAuto?.let { flag ->
+                                if (!flag) {
+                                    onShowToast("검색결과가 존재하지 않습니다.")
+                                }
+                            }
                             setResetData()
                         } else {
                             val itemList = (_documents.value ?: listOf()).toMutableList()
@@ -77,6 +103,17 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                 } ?: onShowToast("예기치 못한 오류가 발생하였습니다.")
             })
             .addTo(compositeDisposable)
+    }
+
+    private fun onSearchProcess(keyword: String?, isAuto: Boolean) {
+        if (keyword.isNullOrEmpty()) {
+            onShowToast("키워드를 입력해주세요")
+            setResetData()
+            return
+        }
+        setResetData()
+        setSearchKeyword(keyword)
+        getSearchBooks(isAuto)
     }
 
     private fun isNeedLoadMore() = (nowTotalCount > reqModel.page * reqModel.size)

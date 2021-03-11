@@ -15,4 +15,13 @@ class BookFragment : BaseFragment<FragmentBookBinding, BookViewModel>(R.layout.f
     override val viewModelVariable: Int
         get() = BR.vm
 
+    override fun onObserve() {
+        with(viewModel) {
+            backAction.observe(viewLifecycleOwner, { event ->
+                event.getContentIfNotHandled()?.let {
+                    requireActivity().onBackPressed()
+                }
+            })
+        }
+    }
 }

@@ -36,6 +36,7 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onBaseObserve()
+        onObserve()
     }
 
     private fun onBaseObserve() {
@@ -49,4 +50,6 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
     private fun showToast(msg: String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
+
+    abstract fun onObserve()
 }
