@@ -40,6 +40,7 @@
 
             <TextView
                 android:id="@+id/item_search_book_name_textView"
+                style="@style/AppTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -52,6 +53,7 @@
 
             <TextView
                 android:id="@+id/item_search_book_release_textView"
+                style="@style/AppTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -74,6 +76,7 @@
 
             <TextView
                 android:id="@+id/item_search_book_content_textView"
+                style="@style/AppTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -88,6 +91,7 @@
 
             <TextView
                 android:id="@+id/item_search_book_price_textView"
+                style="@style/AppTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
