@@ -28,6 +28,7 @@
                 android:id="@+id/book_back_imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:onClick="@{() -> vm.onBackClicked()}"
                 android:paddingStart="10dp"
                 android:paddingEnd="20dp"
                 android:src="@drawable/ic_left_arrow" />
@@ -41,6 +42,7 @@
                 android:id="@+id/book_like_imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:onClick="@{() -> vm.onLikeClicked()}"
                 android:padding="10dp"
                 android:src="@{vm.document.like ? @drawable/ic_like_on : @drawable/ic_like_off}"
                 tools:src="@drawable/ic_like_off" />
@@ -141,7 +143,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/book_book_publisher_textView"
                     tools:text="책내용" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>

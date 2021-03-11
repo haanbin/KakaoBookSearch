@@ -19,7 +19,7 @@ data class Document(
     val translators: List<String>,
     val url: String
 ) : Parcelable {
-    val isLike: Boolean = false
+    var isLike: Boolean = false
 
     constructor(parcel: Parcel) : this(
         parcel.createStringArrayList() ?: mutableListOf(),

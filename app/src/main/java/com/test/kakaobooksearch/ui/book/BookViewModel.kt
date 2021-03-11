@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class BookViewModel @Inject constructor(val handle: SavedStateHandle) : BaseViewModel() {
+class BookViewModel @Inject constructor(private val handle: SavedStateHandle) : BaseViewModel() {
 
     private val _document = MutableLiveData<Document>()
     val document: LiveData<Document>
@@ -28,5 +28,18 @@ class BookViewModel @Inject constructor(val handle: SavedStateHandle) : BaseView
             onShowToast("상세정보가 정확하지 않습니다.")
             _backAction.value = Event(Unit)
         }
+    }
+
+    // 좋아요 클릭
+    fun onLikeClicked() {
+        _document.value?.let {
+            it.isLike = !it.isLike
+            _document.value = it
+        }
+    }
+
+    // 뒤로가기 클릭
+    fun onBackClicked() {
+        _backAction.value = Event(Unit)
     }
 }
