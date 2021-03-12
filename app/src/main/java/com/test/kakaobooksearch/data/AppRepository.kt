@@ -35,11 +35,12 @@ class AppRepository @Inject constructor(
         val metaDto = localDataSource.getMeta(keyword)
         val metaDtoTimestamp = metaDto?.timeStamp ?: 0
         return if (isNeedNetwork(metaDtoTimestamp)) {
-            // 네트워크 연결이 필요한경우
+            // 네트워크 연결이 필요한 경우
             val remoteKakaoBook = remoteDataSource.getSearchBooks(queryMap)
             saveKaKaoBookInDB(keyword, page, metaDto, remoteKakaoBook)
             remoteKakaoBook
         } else {
+            // DB 정보 사용할 경우
             // DB 정보 가공
             val result = metaDto?.let {
                 val list = localDataSource.getDocuments(it.id, getStart(page, size), size)
