@@ -8,6 +8,7 @@ import com.test.kakaobooksearch.data.entities.Meta
 data class MetaDto(
     val keyword: String,
     val totalCount: Int,
+    val pageableCount: Int,
     val timeStamp: Long
 ) {
     @PrimaryKey(autoGenerate = true)
@@ -15,7 +16,8 @@ data class MetaDto(
 
     fun toMeta(): Meta {
         return Meta(
-            totalCount = totalCount
+            totalCount = totalCount,
+            pageableCount = pageableCount
         )
     }
 }

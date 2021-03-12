@@ -4,16 +4,14 @@ import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.test.kakaobooksearch.util.Event
 import com.test.kakaobooksearch.base.BaseViewModel
-import com.test.kakaobooksearch.util.Constants
 import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.data.entities.KakaoBookReqModel
 import com.test.kakaobooksearch.domain.GetSearchBooksUseCase
+import com.test.kakaobooksearch.util.Constants
+import com.test.kakaobooksearch.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,11 +31,17 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     val openBookDetail: LiveData<Event<Document>>
         get() = _openBookDetail
 
+    // 이미 검색중이 항목이 있으면 취소를 위함
+    private var job: Job = Job()
+
     //two way binding
     val searchKeyword = MutableLiveData<String>()
 
+    // API 요청 모델
     private val reqModel = KakaoBookReqModel()
-    private var nowTotalCount = 0
+
+    // 페이징 가능한 카운트
+    private var pageableCount = 0
 
     // 더 불러오기
     val onLoad = {
@@ -75,7 +79,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 상세 정보 반영 (좋아요)
     fun setDocumentChangeProcess(document: Document) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             _documents.value?.let {
                 val itemList = it.toMutableList()
                 for (index in itemList.indices) {
@@ -93,16 +97,18 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 도서 검색하기
     private fun getSearchBooks(isAuto: Boolean?) {
-        viewModelScope.launch(Dispatchers.IO) {
+        job = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val kakaoBook = getSearchBooksUseCase(reqModel.toMap())
                 if (reqModel.page == 1) {
-                    nowTotalCount = kakaoBook.meta.totalCount
+                    pageableCount = kakaoBook.meta.pageableCount
                 }
                 if (kakaoBook.meta.totalCount == 0) {
                     isAuto?.let { flag ->
                         if (!flag) {
-                            onShowToast("검색결과가 존재하지 않습니다.")
+                            withContext(Dispatchers.Main) {
+                                onShowToast("검색결과가 존재하지 않습니다.")
+                            }
                         }
                     }
                     withContext(Dispatchers.Main) {
@@ -115,14 +121,27 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                         _documents.value = itemList
                     }
                 }
+            } catch (e: CancellationException) {
+                Timber.d("CancellationException : ${e.message}")
             } catch (e: Exception) {
                 Timber.d("Exceptions : ${e.message}")
-                onShowToast("예기치 못한 오류가 발생하였습니다.")
+                withContext(Dispatchers.Main) {
+                    onShowToast("예기치 못한 오류가 발생하였습니다.")
+                }
             }
         }
     }
 
+    // 실행중인 검색 작업이 있으면 제거
+    private fun checkJobActive() {
+        if (job.isActive) {
+            job.cancel()
+        }
+    }
+
+    // 검색 프로세스
     private fun onSearchProcess(keyword: String?, isAuto: Boolean) {
+        checkJobActive()
         if (keyword.isNullOrEmpty()) {
             onShowToast("키워드를 입력해주세요")
             setResetData()
@@ -133,10 +152,8 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         getSearchBooks(isAuto)
     }
 
-    private fun isNeedLoadMore(): Boolean {
-        val itemList = (_documents.value ?: listOf()).toMutableList()
-        return (nowTotalCount > itemList.size)
-    }
+    // paging 호출 판단
+    private fun isNeedLoadMore() = (pageableCount > reqModel.page * reqModel.size)
 
     // reqModel page up
     private fun setPageUp() {

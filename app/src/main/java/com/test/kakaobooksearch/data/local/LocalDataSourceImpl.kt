@@ -1,9 +1,10 @@
 package com.test.kakaobooksearch.data.local
 
-import com.test.kakaobooksearch.data.entities.KakaoBook
+import com.test.kakaobooksearch.data.entities.Document
+import com.test.kakaobooksearch.data.entities.Meta
 import com.test.kakaobooksearch.data.entities.toDocumentDto
+import com.test.kakaobooksearch.data.local.dto.DocumentDto
 import com.test.kakaobooksearch.data.local.dto.MetaDto
-import com.test.kakaobooksearch.data.local.dto.toDocument
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,18 +18,23 @@ class LocalDataSourceImpl @Inject constructor(
         return metaDao.selectOneMeta(keyword)
     }
 
-    override suspend fun getKakaoBook(keyword: String): KakaoBook? {
-        val metaDto = metaDao.selectOneMeta(keyword)
-        return metaDto?.let {
-            val documentDtoList = documentDao.selectDocuments(it.id)
-            return KakaoBook(documentDtoList.toDocument(), it.toMeta())
-        }
+    override suspend fun getDocuments(metaId: Long, start: Int, size: Int): List<DocumentDto> {
+        return documentDao.selectDocuments(metaId, start, size)
     }
 
-    override suspend fun saveKakaoBook(kakoBook: KakaoBook, keyword: String) {
-        metaDao.deleteMeta(keyword)
-        val metaId = metaDao.insertMeta(kakoBook.meta.toMetaDto(keyword))
+    override suspend fun saveMeta(meta: Meta, keyword: String): Long {
+        return metaDao.insertMeta(meta.toMetaDto(keyword))
+    }
+
+    override suspend fun saveDocument(documents: List<Document>, metaId: Long) {
+        documentDao.insertAll(documents.toDocumentDto(metaId))
+    }
+
+    override suspend fun removeMeta(keyWord: String) {
+        metaDao.deleteMeta(keyWord)
+    }
+
+    override suspend fun removeDocuments(metaId: Long) {
         documentDao.deleteDocumentsMetaId(metaId)
-        documentDao.insertAll(kakoBook.documents.toDocumentDto(metaId))
     }
 }

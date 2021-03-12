@@ -4,8 +4,8 @@ import com.test.kakaobooksearch.util.Constants
 
 data class KakaoBookReqModel(
     var query: String = "",
-    val size: Int = 50,
-    var page: Int = 1
+    val size: Int = Constants.DEFAULT_SIZE_VALUE,
+    var page: Int = Constants.DEFAULT_PAGE_VALUE
 ) {
     fun toMap(): Map<String, String> {
         return mapOf(

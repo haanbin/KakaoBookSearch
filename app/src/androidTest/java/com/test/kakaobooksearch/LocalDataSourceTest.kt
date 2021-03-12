@@ -1,10 +1,15 @@
 package com.test.kakaobooksearch
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.test.kakaobooksearch.data.entities.Document
+import com.test.kakaobooksearch.data.entities.KakaoBook
 import com.test.kakaobooksearch.data.entities.Meta
 import com.test.kakaobooksearch.data.local.LocalDataSource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
@@ -30,17 +35,9 @@ class LocalDataSourceTest {
 
     @Test
     fun localDataSourceTest() = runBlocking {
-        val metaId = localDataSource.saveMeta(Meta(10), "테스트")
-        println("metaId : $metaId")
-        Assert.assertNotNull(metaId)
+        localDataSource.saveKakaoBook(KakaoBook(listOf(), Meta(10)), "테스트")
         val metaDto = localDataSource.getMeta("테스트")
         println("metaDto : $metaDto")
         Assert.assertNotNull(metaDto)
-        localDataSource.remoteMeta("테스트")
-        val remoteMetaDto = localDataSource.getMeta("테스트")
-        println("remoteMetaDto : $remoteMetaDto")
-        Assert.assertNull(remoteMetaDto)
     }
-
-
 }

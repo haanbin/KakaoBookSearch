@@ -12,8 +12,8 @@ interface DocumentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(documents: List<DocumentDto>)
 
-    @Query("SELECT * FROM DOCUMENT INNER JOIN META ON META.id = DOCUMENT.metaId WHERE META.id = :metaId")
-    suspend fun selectDocuments(metaId: Long): List<DocumentDto>
+    @Query("SELECT * FROM DOCUMENT INNER JOIN META ON META.id = DOCUMENT.metaId WHERE META.id = :metaId LIMIT :size OFFSET :start")
+    suspend fun selectDocuments(metaId: Long, start: Int, size: Int): List<DocumentDto>
 
     @Query("DELETE FROM DOCUMENT WHERE DOCUMENT.metaId = :metaId")
     suspend fun deleteDocumentsMetaId(metaId: Long)

@@ -10,6 +10,7 @@ object Constants {
     const val PAGE = "page"
     const val SIZE = "size"
     const val DEFAULT_PAGE_VALUE = 1
+    const val DEFAULT_SIZE_VALUE = 20
     const val NETWORK_NEED_SECOND = 60 * 5
 
 }
