@@ -3,8 +3,6 @@ package com.test.kakaobooksearch.data
 import com.test.kakaobooksearch.data.entities.KakaoBook
 import com.test.kakaobooksearch.data.local.LocalDataSource
 import com.test.kakaobooksearch.data.remote.RemoteDataSource
-import io.reactivex.Single
-import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,6 +13,6 @@ class AppRepository @Inject constructor(
 ) :
     AppDataSource {
 
-    override fun getSearchBooks(queryMap: Map<String, String>): Single<KakaoBook> =
+    override suspend fun getSearchBooks(queryMap: Map<String, String>): KakaoBook =
         remoteDataSource.getSearchBooks(queryMap)
 }

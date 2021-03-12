@@ -48,17 +48,16 @@ dependencies {
     implementation deps.activity
     implementation deps.fragment
 
+    implementation deps.coroutines.core
+    implementation deps.coroutines.android
+    testImplementation deps.coroutines.test
+
     implementation deps.glide.runtime
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.glide.compiler
 
     implementation deps.retrofit.runtime
     implementation deps.retrofit.gson
-    implementation deps.retrofit.rx_adapter
     implementation deps.okhttp_logging_interceptor
-
-    implementation deps.rx_android
-    implementation deps.rx_kotlin
 
     implementation deps.hilt.android
     kapt deps.hilt.complier

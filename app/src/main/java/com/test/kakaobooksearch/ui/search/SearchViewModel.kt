@@ -3,6 +3,7 @@ package com.test.kakaobooksearch.ui.search
 import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.test.kakaobooksearch.util.Event
 import com.test.kakaobooksearch.base.BaseViewModel
 import com.test.kakaobooksearch.base.Constants
@@ -10,10 +11,10 @@ import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.data.entities.KakaoBookReqModel
 import com.test.kakaobooksearch.domain.GetSearchBooksUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -74,13 +75,17 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 상세 정보 반영 (좋아요)
     fun setDocumentChangeProcess(document: Document) {
-        _documents.value?.let {
-            val itemList = it.toMutableList()
-            for (index in itemList.indices) {
-                if (itemList[index].isbn == document.isbn) {
-                    itemList[index] = document
-                    _documents.value = itemList
-                    return@let
+        viewModelScope.launch(Dispatchers.IO) {
+            _documents.value?.let {
+                val itemList = it.toMutableList()
+                for (index in itemList.indices) {
+                    if (itemList[index].isbn == document.isbn) {
+                        itemList[index] = document
+                        withContext(Dispatchers.Main) {
+                            _documents.value = itemList
+                        }
+                        return@let
+                    }
                 }
             }
         }
@@ -88,30 +93,33 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 도서 검색하기
     private fun getSearchBooks(isAuto: Boolean?) {
-        getSearchBooksUseCase(reqModel.toMap())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val kakaoBook = getSearchBooksUseCase(reqModel.toMap())
                 if (reqModel.page == 1) {
-                    nowTotalCount = it.meta.totalCount
+                    nowTotalCount = kakaoBook.meta.totalCount
                 }
-                if (it.meta.totalCount == 0) {
+                if (kakaoBook.meta.totalCount == 0) {
                     isAuto?.let { flag ->
                         if (!flag) {
                             onShowToast("검색결과가 존재하지 않습니다.")
                         }
                     }
-                    setResetData()
+                    withContext(Dispatchers.Main) {
+                        setResetData()
+                    }
                 } else {
                     val itemList = (_documents.value ?: listOf()).toMutableList()
-                    itemList.addAll(it.documents)
-                    _documents.value = itemList
+                    itemList.addAll(kakaoBook.documents)
+                    withContext(Dispatchers.Main) {
+                        _documents.value = itemList
+                    }
                 }
-            }, {
-                it.message?.let { msg ->
-                    onShowToast(msg)
-                } ?: onShowToast("예기치 못한 오류가 발생하였습니다.")
-            })
-            .addTo(compositeDisposable)
+            } catch (e: Exception) {
+                Timber.d("Exceptions : ${e.message}")
+                onShowToast("예기치 못한 오류가 발생하였습니다.")
+            }
+        }
     }
 
     private fun onSearchProcess(keyword: String?, isAuto: Boolean) {
@@ -125,7 +133,10 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         getSearchBooks(isAuto)
     }
 
-    private fun isNeedLoadMore() = (nowTotalCount > reqModel.page * reqModel.size)
+    private fun isNeedLoadMore(): Boolean {
+        val itemList = (_documents.value ?: listOf()).toMutableList()
+        return (nowTotalCount > itemList.size)
+    }
 
     // reqModel page up
     private fun setPageUp() {
@@ -147,3 +158,6 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         }
     }
 }
+
+
+
