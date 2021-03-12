@@ -31,9 +31,6 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     val openBookDetail: LiveData<Event<Document>>
         get() = _openBookDetail
 
-    // 이미 검색중이 항목이 있으면 취소를 위함
-    private var job: Job = Job()
-
     //two way binding
     val searchKeyword = MutableLiveData<String>()
 
@@ -97,7 +94,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 도서 검색하기
     private fun getSearchBooks(isAuto: Boolean?) {
-        job = viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val kakaoBook = getSearchBooksUseCase(reqModel.toMap())
                 if (reqModel.page == 1) {
@@ -132,16 +129,12 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         }
     }
 
-    // 실행중인 검색 작업이 있으면 제거
-    private fun checkJobActive() {
-        if (job.isActive) {
-            job.cancel()
-        }
-    }
-
     // 검색 프로세스
     private fun onSearchProcess(keyword: String?, isAuto: Boolean) {
-        checkJobActive()
+        // 실행중인 검색 작업이 있으면 제거
+        if (viewModelScope.isActive) {
+            viewModelScope.cancel()
+        }
         if (keyword.isNullOrEmpty()) {
             onShowToast("키워드를 입력해주세요")
             setResetData()
