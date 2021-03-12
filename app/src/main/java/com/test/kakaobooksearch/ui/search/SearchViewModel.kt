@@ -19,6 +19,10 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: GetSearchBooksUseCase) :
     BaseViewModel() {
 
+    private val _loading = MutableLiveData(false)
+    val loading: LiveData<Boolean>
+        get() = _loading
+
     private val _documents = MutableLiveData<List<Document>>()
     val documents: LiveData<List<Document>>
         get() = _documents
@@ -99,6 +103,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     private fun getSearchBooks(isAuto: Boolean?) {
         job = viewModelScope.launch {
             try {
+                _loading.value = true
                 val kakaoBook = getSearchBooksUseCase(reqModel.toMap())
                 if (reqModel.page == 1) {
                     pageableCount = kakaoBook.meta.pageableCount
@@ -115,9 +120,12 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                     itemList.addAll(kakaoBook.documents)
                     _documents.value = itemList
                 }
+                _loading.value = false
             } catch (e: CancellationException) {
+                _loading.value = false
                 Timber.d("CancellationException : ${e.message}")
             } catch (e: Exception) {
+                _loading.value = false
                 Timber.d("Exceptions : ${e.message}")
                 withContext(Dispatchers.Main) {
                     onShowToast("예기치 못한 오류가 발생하였습니다.")
