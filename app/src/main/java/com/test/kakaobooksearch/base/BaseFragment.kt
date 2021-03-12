@@ -16,7 +16,7 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
     protected val layoutRes: Int
 ) : Fragment() {
 
-    protected lateinit var binding: B
+    private lateinit var binding: B
     abstract val viewModel: VM
     abstract val viewModelVariable: Int
 

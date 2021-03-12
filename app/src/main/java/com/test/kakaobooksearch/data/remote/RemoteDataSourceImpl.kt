@@ -9,5 +9,4 @@ class RemoteDataSourceImpl @Inject constructor(private val retrofitService: Retr
 
     override suspend fun getSearchBooks(queryMap: Map<String, String>): KakaoBook =
         retrofitService.getSearchBooks(queryMap)
-
 }

@@ -5,7 +5,6 @@ import com.test.kakaobooksearch.data.local.LocalDataSource
 import com.test.kakaobooksearch.data.local.dto.MetaDto
 import com.test.kakaobooksearch.data.local.dto.toDocument
 import com.test.kakaobooksearch.data.remote.RemoteDataSource
-import com.test.kakaobooksearch.util.Constants
 import com.test.kakaobooksearch.util.Constants.DEFAULT_PAGE_VALUE
 import com.test.kakaobooksearch.util.Constants.DEFAULT_SIZE_VALUE
 import com.test.kakaobooksearch.util.Constants.NETWORK_NEED_SECOND

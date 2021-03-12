@@ -2,7 +2,6 @@ package com.test.kakaobooksearch.ui.main
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.test.kakaobooksearch.BR

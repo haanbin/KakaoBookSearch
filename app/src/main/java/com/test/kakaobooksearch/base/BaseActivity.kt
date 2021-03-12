@@ -1,7 +1,6 @@
 package com.test.kakaobooksearch.base
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -12,7 +11,7 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel>(
     protected val layoutRes: Int
 ) : AppCompatActivity() {
 
-    protected lateinit var binding: B
+    private lateinit var binding: B
     abstract val viewModel: VM
     abstract val viewModelVariable: Int
 
