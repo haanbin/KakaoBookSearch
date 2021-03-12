@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.test.kakaobooksearch.domain.GetSearchBooksUseCase
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.runBlocking
 import org.junit.*
 import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
@@ -19,9 +20,11 @@ class GetSearchBooksUseCaseTest {
     @Inject
     lateinit var getSearchBooksUseCase: GetSearchBooksUseCase
 
-    private val queryMap = HashMap<String, String>().apply {
-        put("query", "미움받을 용기")
-    }
+    private val queryMap: Map<String, String> = mapOf(
+        "query" to "미움받을용기",
+        "page" to "1",
+        "size" to "50"
+    )
 
     @Before
     fun init() {
@@ -29,19 +32,12 @@ class GetSearchBooksUseCaseTest {
     }
 
     @Test
-    fun getMovieUseCaseTest() {
+    fun getMovieUseCaseTest() = runBlocking {
         Assert.assertNotNull(getSearchBooksUseCase)
-        val response = getSearchBooksUseCase.invoke(queryMap)
-        response.doOnSubscribe {
-            println("SUCCESS : $it")
-        }.test()
-            .awaitDone(3, TimeUnit.SECONDS)
-            .assertValue {
-                println(it)
-                it.isSuccessful
-            }
-            .assertComplete()
-
+        val response = getSearchBooksUseCase(queryMap)
+        Assert.assertNotNull(response)
     }
+
+
 }
 
