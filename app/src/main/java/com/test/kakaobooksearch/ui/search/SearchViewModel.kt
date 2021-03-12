@@ -36,7 +36,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         get() = _openBookDetail
 
     // 이미 검색중이 항목이 있으면 취소를 위함
-    private var job: Job = Job()
+    private var job: Job = SupervisorJob()
 
     //two way binding
     val searchKeyword = MutableLiveData<String>()
