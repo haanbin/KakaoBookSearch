@@ -11,7 +11,6 @@ import com.test.kakaobooksearch.util.Constants.NETWORK_NEED_SECOND
 import com.test.kakaobooksearch.util.Constants.PAGE
 import com.test.kakaobooksearch.util.Constants.QUERY
 import com.test.kakaobooksearch.util.Constants.SIZE
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -66,7 +65,7 @@ class AppRepository @Inject constructor(
         metaDto: MetaDto?,
         kakaoBook: KakaoBook
     ) =
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch {
             if (page == 1) {
                 localDataSource.removeMeta(keyword)
                 val metaId = localDataSource.saveMeta(kakaoBook.meta, keyword)

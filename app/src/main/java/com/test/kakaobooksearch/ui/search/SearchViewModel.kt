@@ -97,7 +97,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 도서 검색하기
     private fun getSearchBooks(isAuto: Boolean?) {
-        job = viewModelScope.launch(Dispatchers.IO) {
+        job = viewModelScope.launch {
             try {
                 val kakaoBook = getSearchBooksUseCase(reqModel.toMap())
                 if (reqModel.page == 1) {
@@ -106,20 +106,14 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                 if (kakaoBook.meta.totalCount == 0) {
                     isAuto?.let { flag ->
                         if (!flag) {
-                            withContext(Dispatchers.Main) {
-                                onShowToast("검색결과가 존재하지 않습니다.")
-                            }
+                            onShowToast("검색결과가 존재하지 않습니다.")
                         }
                     }
-                    withContext(Dispatchers.Main) {
-                        setResetData()
-                    }
+                    setResetData()
                 } else {
                     val itemList = (_documents.value ?: listOf()).toMutableList()
                     itemList.addAll(kakaoBook.documents)
-                    withContext(Dispatchers.Main) {
-                        _documents.value = itemList
-                    }
+                    _documents.value = itemList
                 }
             } catch (e: CancellationException) {
                 Timber.d("CancellationException : ${e.message}")
