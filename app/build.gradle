@@ -52,6 +52,11 @@ dependencies {
     implementation deps.coroutines.android
     testImplementation deps.coroutines.test
 
+    implementation deps.room.runtime
+    kapt deps.room.compiler
+    implementation deps.room.ktx
+    testImplementation deps.room.test
+
     implementation deps.glide.runtime
     kapt deps.glide.compiler
 

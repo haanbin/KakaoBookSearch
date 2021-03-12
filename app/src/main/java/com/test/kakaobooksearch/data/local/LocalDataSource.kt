@@ -1,5 +1,21 @@
 package com.test.kakaobooksearch.data.local
 
+import com.test.kakaobooksearch.data.entities.Document
+import com.test.kakaobooksearch.data.entities.Meta
+import com.test.kakaobooksearch.data.local.dto.DocumentDto
+import com.test.kakaobooksearch.data.local.dto.MetaDto
+
 interface LocalDataSource {
 
+    suspend fun saveMeta(meta: Meta, keyword: String): Long
+
+    suspend fun saveDocument(documents: List<Document>, metaId: Long)
+
+    suspend fun remoteMeta(keyWord: String)
+
+    suspend fun remoteDocuments(metaId: Long)
+
+    suspend fun getMeta(keyword: String): MetaDto
+
+    suspend fun getDocuments(metaId: Long): List<DocumentDto>
 }
