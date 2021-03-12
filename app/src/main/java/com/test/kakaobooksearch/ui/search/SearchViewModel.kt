@@ -47,6 +47,13 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     // 페이징 가능한 카운트
     private var pageableCount = 0
 
+    private val exception = CoroutineExceptionHandler { _, throwable ->
+        // 여기서 예외 처리
+        _loading.value = false
+        Timber.d("Exceptions : ${throwable.message}")
+        onShowToast("예기치 못한 오류가 발생하였습니다.")
+    }
+
     // 더 불러오기
     val onLoad = {
         if (isNeedLoadMore()) {
@@ -101,7 +108,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 도서 검색하기
     private fun getSearchBooks(isAuto: Boolean?) {
-        job = viewModelScope.launch {
+        job = viewModelScope.launch(exception) {
             try {
                 _loading.value = true
                 val kakaoBook = getSearchBooksUseCase(reqModel.toMap())
@@ -124,12 +131,6 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
             } catch (e: CancellationException) {
                 _loading.value = false
                 Timber.d("CancellationException : ${e.message}")
-            } catch (e: Exception) {
-                _loading.value = false
-                Timber.d("Exceptions : ${e.message}")
-                withContext(Dispatchers.Main) {
-                    onShowToast("예기치 못한 오류가 발생하였습니다.")
-                }
             }
         }
     }
