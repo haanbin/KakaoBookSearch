@@ -1,7 +1,7 @@
 package com.test.kakaobooksearch.di
 
 import com.test.kakaobooksearch.BuildConfig
-import com.test.kakaobooksearch.base.Constants
+import com.test.kakaobooksearch.util.Constants
 import com.test.kakaobooksearch.data.api.RetrofitService
 import dagger.Module
 import dagger.Provides

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.test.kakaobooksearch.util.Event
 import com.test.kakaobooksearch.base.BaseViewModel
-import com.test.kakaobooksearch.base.Constants
+import com.test.kakaobooksearch.util.Constants
 import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.data.entities.KakaoBookReqModel
 import com.test.kakaobooksearch.domain.GetSearchBooksUseCase

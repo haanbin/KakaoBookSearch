@@ -1,6 +1,6 @@
 package com.test.kakaobooksearch.data.entities
 
-import com.test.kakaobooksearch.base.Constants
+import com.test.kakaobooksearch.util.Constants
 
 data class KakaoBookReqModel(
     var query: String = "",

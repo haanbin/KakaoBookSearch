@@ -17,5 +17,5 @@ interface MetaDao {
     suspend fun deleteMeta(keyword: String)
 
     @Query("SELECT * FROM META WHERE META.keyword = :keyword")
-    suspend fun selectOneMeta(keyword: String): MetaDto
+    suspend fun selectOneMeta(keyword: String): MetaDto?
 }
