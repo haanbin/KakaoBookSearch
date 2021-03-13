@@ -2,7 +2,6 @@ package com.test.kakaobooksearch.ui.book
 
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.test.kakaobooksearch.BR
 import com.test.kakaobooksearch.R
 import com.test.kakaobooksearch.base.BaseFragment
@@ -21,12 +20,12 @@ class BookFragment : BaseFragment<FragmentBookBinding, BookViewModel>(R.layout.f
 
     override fun onObserve() {
         with(viewModel) {
-            backAction.observe(viewLifecycleOwner, Observer { event ->
+            backAction.observe(viewLifecycleOwner, { event ->
                 event.getContentIfNotHandled()?.let {
                     requireActivity().onBackPressed()
                 }
             })
-            changeDocumentAction.observe(viewLifecycleOwner, Observer { event ->
+            changeDocumentAction.observe(viewLifecycleOwner, { event ->
                 event.getContentIfNotHandled()?.let {
                     sharedViewModel.onDocumentChange(it)
                 }

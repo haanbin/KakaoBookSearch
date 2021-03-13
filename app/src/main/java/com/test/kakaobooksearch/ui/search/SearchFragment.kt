@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.test.kakaobooksearch.BR
 import com.test.kakaobooksearch.R
@@ -25,19 +24,19 @@ class SearchFragment :
 
     override fun onObserve() {
         with(viewModel) {
-            hideKeyboard.observe(viewLifecycleOwner, Observer { event ->
+            hideKeyboard.observe(viewLifecycleOwner, { event ->
                 event.getContentIfNotHandled()?.let {
                     hideKeyboard()
                 }
             })
-            openBookDetail.observe(viewLifecycleOwner, Observer { event ->
+            openBookDetail.observe(viewLifecycleOwner, { event ->
                 event.getContentIfNotHandled()?.let {
                     openBookFragment(it)
                 }
             })
         }
         with(sharedViewModel) {
-            changeDocumentAction.observe(viewLifecycleOwner, Observer { event ->
+            changeDocumentAction.observe(viewLifecycleOwner, { event ->
                 event.getContentIfNotHandled()?.let {
                     viewModel.setDocumentChangeProcess(it)
                 }
