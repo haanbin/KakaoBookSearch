@@ -23,10 +23,14 @@ fun TextView.setTimeStampFormat(timeStamp: String) {
 
 @BindingAdapter("bind:usFormat")
 fun TextView.setUsFormat(price: String) {
+    if (price == "0") {
+        text = "-"
+        return
+    }
     text = try {
         NumberFormat.getInstance(Locale.US).format(price.toLong()) + "원"
     } catch (e: Exception) {
-        "0원"
+        "-"
     }
 
 }
