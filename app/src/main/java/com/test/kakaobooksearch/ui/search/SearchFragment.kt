@@ -1,7 +1,6 @@
 package com.test.kakaobooksearch.ui.search
 
 import android.content.Context
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -52,10 +51,10 @@ class SearchFragment :
     }
 
     private fun hideKeyboard() {
-        val inputMethodManager =
-            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(
-            (view ?: View(requireContext())).windowToken, 0
-        )
+        requireActivity().currentFocus?.let {
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+        }
     }
 }
