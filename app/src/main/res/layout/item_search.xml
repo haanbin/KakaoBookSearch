@@ -29,7 +29,7 @@
             <ImageView
                 android:id="@+id/item_search_book_imageView"
                 android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
                 android:layout_marginStart="5dp"
                 android:scaleType="fitXY"
@@ -40,28 +40,31 @@
 
             <TextView
                 android:id="@+id/item_search_book_name_textView"
-                style="@style/AppTextView"
+                style="@style/AppTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="15dp"
                 android:text="@{model.title}"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@id/item_search_book_release_textView"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toEndOf="@id/item_search_book_imageView"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="책이름" />
+                app:layout_constraintWidth_max="wrap"
+                tools:text="책이름책이름책이름책이름책이름책이름" />
 
             <TextView
                 android:id="@+id/item_search_book_release_textView"
                 style="@style/AppTextView"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="5dp"
-                android:text="@{model.datetime}"
+                app:layout_constraintBaseline_toBaselineOf="@id/item_search_book_name_textView"
                 app:layout_constraintEnd_toStartOf="@id/item_search_like_imageView"
-                app:layout_constraintStart_toEndOf="@id/item_search_book_name_textView"
-                app:layout_constraintTop_toTopOf="parent"
+                bind:timeStampFormat="@{model.datetime}"
                 tools:text="출시일" />
 
             <androidx.constraintlayout.widget.Barrier
@@ -96,11 +99,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="5dp"
-                android:text="@{model.price}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/item_search_like_imageView"
                 app:layout_constraintStart_toEndOf="@id/item_search_book_imageView"
                 app:layout_constraintTop_toBottomOf="@id/item_search_book_content_textView"
+                bind:usFormat='@{model.salePrice.equals("-1") ? model.price : model.salePrice}'
                 tools:text="책가격" />
 
             <ImageView

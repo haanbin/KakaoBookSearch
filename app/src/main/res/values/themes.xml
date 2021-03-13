@@ -19,6 +19,13 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="AppTitleTextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/title_text</item>
+        <item name="android:textSize">@dimen/title</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <style name="AppEditText" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/text</item>
         <item name="android:includeFontPadding">false</item>
