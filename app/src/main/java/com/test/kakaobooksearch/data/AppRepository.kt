@@ -5,12 +5,7 @@ import com.test.kakaobooksearch.data.local.LocalDataSource
 import com.test.kakaobooksearch.data.local.dto.MetaDto
 import com.test.kakaobooksearch.data.local.dto.toDocument
 import com.test.kakaobooksearch.data.remote.RemoteDataSource
-import com.test.kakaobooksearch.util.Constants.DEFAULT_PAGE_VALUE
-import com.test.kakaobooksearch.util.Constants.DEFAULT_SIZE_VALUE
-import com.test.kakaobooksearch.util.Constants.NETWORK_NEED_SECOND
-import com.test.kakaobooksearch.util.Constants.PAGE
-import com.test.kakaobooksearch.util.Constants.QUERY
-import com.test.kakaobooksearch.util.Constants.SIZE
+import com.test.kakaobooksearch.util.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,9 +25,9 @@ class AppRepository @Inject constructor(
      * 크면 리모트 데이타
      */
     override suspend fun getSearchBooks(queryMap: Map<String, String>): KakaoBook {
-        val keyword = queryMap[QUERY] ?: ""
-        val size = queryMap[SIZE]?.toInt() ?: DEFAULT_SIZE_VALUE
-        val page = queryMap[PAGE]?.toInt() ?: DEFAULT_PAGE_VALUE
+        val keyword = queryMap[Constants.QUERY] ?: ""
+        val size = queryMap[Constants.SIZE]?.toInt() ?: Constants.DEFAULT_SIZE_VALUE
+        val page = queryMap[Constants.PAGE]?.toInt() ?: Constants.DEFAULT_PAGE_VALUE
         val metaDto = localDataSource.getMeta(keyword)
         val metaDtoTimestamp = metaDto?.timeStamp ?: 0
         return if (isNeedNetwork(metaDtoTimestamp)) {
@@ -96,7 +91,7 @@ class AppRepository @Inject constructor(
      * API 호출한지 Constants.NETWORK_NEED_TIME 지났으면 재호출
      */
     private fun isNeedNetwork(timestamp: Long): Boolean {
-        return (System.currentTimeMillis() - timestamp) / 1000 > NETWORK_NEED_SECOND
+        return (System.currentTimeMillis() - timestamp) / 1000 > Constants.NETWORK_NEED_SECOND
     }
 
     /**
