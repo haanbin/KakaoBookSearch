@@ -57,13 +57,17 @@ fun TextView.setBooPrice(price: String, salePrice: String) {
 @BindingAdapter(
     "bind:listToString",
     "bind:listSeparator",
+    "bind:listAddString",
     requireAll = false
 )
-fun TextView.setListToString(list: List<String>, listSeparator: String?) {
-    text = if (list.isEmpty()) {
+fun TextView.setListToString(list: List<String>, listSeparator: String?, listAddString: String?) {
+    val listSeparatorNotNull = listSeparator ?: ", "
+    val listAddStringNotNull = listAddString ?: ""
+    val formatText = list.joinToString(listSeparatorNotNull)
+    text = if (formatText.isEmpty()) {
         ""
     } else {
-        val listSeparatorNotNull = listSeparator ?: ", "
-        list.joinToString(listSeparatorNotNull)
+        "$formatText$listAddStringNotNull"
     }
+
 }

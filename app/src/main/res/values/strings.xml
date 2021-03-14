@@ -4,4 +4,6 @@
     <string name="book">book</string>
     <string name="search">Search</string>
     <string name="book_detail_move">도서 상세 이동</string>
+    <string name="add_author">(저)</string>
+    <string name="add_translate">(변)</string>
 </resources>
