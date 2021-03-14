@@ -9,6 +9,8 @@ fun ImageView.setImageUrl(url: String?) {
     url?.let {
         if (it.isNotEmpty()) {
             Glide.with(context).load(url).into(this@setImageUrl)
+        } else {
+            setImageDrawable(null)
         }
     }
 }
