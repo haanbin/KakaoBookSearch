@@ -38,6 +38,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 bind:imageUrl="@{model.thumbnail}"
+                bind:error="@{@drawable/ic_no_image}"
                 tools:src="@drawable/ic_no_image" />
 
             <TextView
