@@ -1,7 +1,6 @@
 package com.test.kakaobooksearch.ui.search
 
 import android.content.Context
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels

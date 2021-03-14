@@ -58,7 +58,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     val onLoad = {
         if (isNeedLoadMore()) {
             setPageUp()
-            getSearchBooks(null)
+            getSearchBooks(null, true)
         }
     }
 
@@ -113,10 +113,12 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     }
 
     // 도서 검색하기
-    private fun getSearchBooks(isAuto: Boolean?) {
+    private fun getSearchBooks(isAuto: Boolean?, isLoadMore: Boolean) {
         job = viewModelScope.launch(exception) {
             try {
-                _loading.value = true
+                if (!isLoadMore) {
+                    _loading.value = true
+                }
                 val kakaoBook = getSearchBooksUseCase(reqModel.toMap())
                 if (reqModel.page == 1) {
                     pageableCount = kakaoBook.meta.pageableCount
@@ -133,9 +135,13 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                     itemList.addAll(kakaoBook.documents)
                     _documents.value = itemList
                 }
-                _loading.value = false
+                if (!isLoadMore) {
+                    _loading.value = false
+                }
             } catch (e: CancellationException) {
-                _loading.value = false
+                if (!isLoadMore) {
+                    _loading.value = false
+                }
                 Timber.d("CancellationException : ${e.message}")
             }
         }
@@ -154,7 +160,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         }
         setResetData()
         setSearchKeyword(keyword)
-        getSearchBooks(isAuto)
+        getSearchBooks(isAuto, false)
     }
 
     // paging 호출 판단

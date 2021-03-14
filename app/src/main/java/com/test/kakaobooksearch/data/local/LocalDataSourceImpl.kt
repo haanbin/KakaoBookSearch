@@ -18,6 +18,10 @@ class LocalDataSourceImpl @Inject constructor(
         return metaDao.selectOneMeta(keyword)
     }
 
+    override suspend fun getDocument(metaId: Long, start: Int): DocumentDto? {
+        return documentDao.selectOneDocument(metaId, start)
+    }
+
     override suspend fun getDocuments(metaId: Long, start: Int, size: Int): List<DocumentDto> {
         return documentDao.selectDocuments(metaId, start, size)
     }
@@ -36,5 +40,9 @@ class LocalDataSourceImpl @Inject constructor(
 
     override suspend fun removeDocuments(metaId: Long) {
         documentDao.deleteDocumentsMetaId(metaId)
+    }
+
+    override suspend fun removeDocumentsOverId(metaId: Long, id: Long) {
+        documentDao.deleteDocumentsOverId(metaId, id)
     }
 }

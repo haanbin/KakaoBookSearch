@@ -17,4 +17,10 @@ interface DocumentDao {
 
     @Query("DELETE FROM DOCUMENT WHERE DOCUMENT.metaId = :metaId")
     suspend fun deleteDocumentsMetaId(metaId: Long)
+
+    @Query("SELECT * FROM DOCUMENT WHERE DOCUMENT.metaId = :metaId LIMIT 1 OFFSET :start")
+    suspend fun selectOneDocument(metaId: Long, start: Int): DocumentDto?
+
+    @Query("DELETE FROM DOCUMENT WHERE DOCUMENT.metaId = :metaId AND DOCUMENT.id > :id")
+    suspend fun deleteDocumentsOverId(metaId: Long, id: Long)
 }

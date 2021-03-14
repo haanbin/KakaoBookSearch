@@ -38,7 +38,7 @@ class AppRepository @Inject constructor(
         return if (isNeedNetwork(metaDtoTimestamp)) {
             // 네트워크 연결이 필요한 경우
             val remoteKakaoBook = remoteDataSource.getSearchBooks(queryMap)
-            saveKaKaoBookInDB(keyword, page, metaDto, remoteKakaoBook)
+            saveKaKaoBookInDB(keyword, page, size, metaDto, remoteKakaoBook)
             remoteKakaoBook
         } else {
             // DB 정보 사용할 경우
@@ -52,7 +52,7 @@ class AppRepository @Inject constructor(
                 result
             } else {
                 val remoteKakaoBook = remoteDataSource.getSearchBooks(queryMap)
-                saveKaKaoBookInDB(keyword, page, metaDto, remoteKakaoBook)
+                saveKaKaoBookInDB(keyword, page, size, metaDto, remoteKakaoBook)
                 remoteKakaoBook
             }
         }
@@ -64,22 +64,33 @@ class AppRepository @Inject constructor(
     private suspend fun saveKaKaoBookInDB(
         keyword: String,
         page: Int,
+        size: Int,
         metaDto: MetaDto?,
         kakaoBook: KakaoBook
     ) =
         CoroutineScope(Dispatchers.IO).launch {
             if (page == 1) {
                 localDataSource.removeMeta(keyword)
+                metaDto?.let {
+                    localDataSource.removeDocuments(it.id)
+                }
                 val metaId = localDataSource.saveMeta(kakaoBook.meta, keyword)
-                localDataSource.removeDocuments(metaId)
                 localDataSource.saveDocument(kakaoBook.documents, metaId)
             } else {
                 metaDto?.let {
+                    val start = if (getStart(page, size) == 0) {
+                        0
+                    } else {
+                        getStart(page, size) - 1
+                    }
+                    val documentDto = localDataSource.getDocument(it.id, start)
+                    documentDto?.let { documentDtoNotnull ->
+                        localDataSource.removeDocumentsOverId(it.id, documentDtoNotnull.id)
+                    }
                     localDataSource.saveDocument(kakaoBook.documents, it.id)
                 }
             }
         }
-
 
     /**
      * API 호출한지 Constants.NETWORK_NEED_TIME 지났으면 재호출
@@ -91,9 +102,7 @@ class AppRepository @Inject constructor(
     /**
      * 시작 카운트 세기
      */
-    fun getStart(page: Int, size: Int): Int = (page - 1) * size
-
-
+    private fun getStart(page: Int, size: Int): Int = (page - 1) * size
 }
 
 
