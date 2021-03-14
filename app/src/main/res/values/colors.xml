@@ -11,5 +11,6 @@
     <color name="yellow">#F7E600</color>
     <color name="text">#3E3E3E</color>
     <color name="title_text">#2B2B2B</color>
+    <color name="link">#3F51B5</color>
 
 </resources>

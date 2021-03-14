@@ -20,6 +20,10 @@ class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewMode
     val backAction: LiveData<Event<Unit>>
         get() = _backAction
 
+    private val _openUrlAction = MutableLiveData<Event<String>>()
+    val openUrlAction: LiveData<Event<String>>
+        get() = _openUrlAction
+
     private val _changeDocumentAction = MutableLiveData<Event<Document>>()
     val changeDocumentAction: LiveData<Event<Document>>
         get() = _changeDocumentAction
@@ -46,5 +50,12 @@ class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewMode
     // 뒤로가기 클릭
     fun onBackClicked() {
         _backAction.value = Event(Unit)
+    }
+
+    //URL 연결
+    fun onOpenUrl(url: String) {
+        if (url.isNotEmpty()) {
+            _openUrlAction.value = Event(url)
+        }
     }
 }

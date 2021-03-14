@@ -6,6 +6,10 @@
 
     <data>
 
+        <import type="android.text.TextUtils" />
+
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.test.kakaobooksearch.ui.book.BookViewModel" />
@@ -108,18 +112,48 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
-                    android:id="@+id/book_book_price"
+                    android:id="@+id/book_book_price_textView"
+                    style="@style/AppTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
+                    android:textStyle="bold"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toStartOf="@id/book_book_sale_price_textView"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/book_barrier"
+                    bind:bookPrice="@{vm.document.price}"
+                    bind:bookSalePrice="@{vm.document.salePrice}"
+                    tools:text="책가격" />
+
+
+                <TextView
+                    android:id="@+id/book_book_sale_price_textView"
                     style="@style/AppTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/sale_price"
                     android:textStyle="bold"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="5dp"
+                    android:visibility='@{vm.document.salePrice.equals("-1") ? View.GONE : View.VISIBLE}'
+                    app:layout_constraintBaseline_toBaselineOf="@id/book_book_price_textView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/book_barrier"
-                    bind:usFormat='@{vm.document.salePrice.equals("-1") ? vm.document.price : vm.document.salePrice}'
-                    tools:text="책가격" />
+                    app:layout_constraintStart_toEndOf="@id/book_book_price_textView"
+                    app:layout_constraintWidth_max="wrap"
+                    app:layout_constraintWidth_percent="0.5"
+                    bind:usFormat='@{vm.document.salePrice}'
+                    tools:text="할인가" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/book_price_barrier"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="book_book_price_textView, book_book_sale_price_textView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/book_book_publisher_textView"
@@ -131,8 +165,47 @@
                     android:text="@{vm.document.publisher}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/book_book_price"
+                    app:layout_constraintTop_toBottomOf="@id/book_price_barrier"
                     tools:text="출판사" />
+
+
+                <TextView
+                    android:id="@+id/book_book_authors_textView"
+                    style="@style/AppTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="10dp"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toStartOf="@id/book_book_translators_textView"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/book_book_publisher_textView"
+                    bind:listToString="@{vm.document.authors}"
+                    tools:text="저자" />
+
+                <TextView
+                    android:id="@+id/book_book_translators_textView"
+                    style="@style/AppTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBaseline_toBaselineOf="@id/book_book_authors_textView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/book_book_authors_textView"
+                    app:layout_constraintWidth_max="wrap"
+                    app:layout_constraintWidth_percent="0.5"
+                    bind:listToString="@{vm.document.translators}"
+                    tools:text="번역가" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/book_authors_barrier"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="book_book_authors_textView, book_book_translators_textView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/book_book_content_textView"
@@ -144,8 +217,23 @@
                     android:text="@{vm.document.contents}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/book_book_publisher_textView"
+                    app:layout_constraintTop_toBottomOf="@id/book_authors_barrier"
                     tools:text="책내용" />
+
+                <TextView
+                    android:id="@+id/book_book_detail_url_textView"
+                    style="@style/AppTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="5dp"
+                    android:onClick="@{() -> vm.onOpenUrl(vm.document.url)}"
+                    android:text="@string/book_detail_move"
+                    android:textColor="@color/link"
+                    android:visibility='@{TextUtils.isEmpty(vm.document.url) ? View.GONE : View.VISIBLE}'
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/book_book_content_textView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>

@@ -1,8 +1,8 @@
 package com.test.kakaobooksearch.ext
 
+import android.graphics.Paint
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import java.lang.Exception
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,5 +32,39 @@ fun TextView.setUsFormat(price: String) {
     } catch (e: Exception) {
         "-"
     }
+}
 
+
+@BindingAdapter(
+    "bind:bookPrice",
+    "bind:bookSalePrice"
+)
+fun TextView.setBooPrice(price: String, salePrice: String) {
+    if (price == "0") {
+        text = "-"
+        return
+    }
+    if (salePrice != "-1") {
+        paintFlags = this.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+    }
+    text = try {
+        NumberFormat.getInstance(Locale.US).format(price.toLong()) + "원"
+    } catch (e: Exception) {
+        "-"
+    }
+}
+
+@BindingAdapter(
+    "bind:listToString",
+    "bind:listSeparator",
+    requireAll = false
+)
+fun TextView.setListToString(list: List<String>, listSeparator: String?) {
+
+    text = if (list.isEmpty()) {
+        ""
+    } else {
+        val listSeparatorNotNull = listSeparator ?: ", "
+        list.joinToString(listSeparatorNotNull)
+    }
 }

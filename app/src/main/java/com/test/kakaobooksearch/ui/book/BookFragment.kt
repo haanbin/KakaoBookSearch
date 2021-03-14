@@ -1,5 +1,7 @@
 package com.test.kakaobooksearch.ui.book
 
+import android.content.Intent
+import android.net.Uri
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.test.kakaobooksearch.BR
@@ -30,6 +32,16 @@ class BookFragment : BaseFragment<FragmentBookBinding, BookViewModel>(R.layout.f
                     sharedViewModel.onDocumentChange(it)
                 }
             })
+            openUrlAction.observe(viewLifecycleOwner, { event ->
+                event.getContentIfNotHandled()?.let {
+                    openUrl(it)
+                }
+            })
         }
+    }
+
+    // Url 외부 연결
+    private fun openUrl(url: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }
 }

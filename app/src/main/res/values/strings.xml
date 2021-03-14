@@ -3,4 +3,5 @@
     <string name="search_hint">책 이름을 입력하세요</string>
     <string name="book">book</string>
     <string name="search">Search</string>
+    <string name="book_detail_move">도서 상세 이동</string>
 </resources>
