@@ -98,15 +98,12 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     fun setDocumentChangeProcess(document: Document) {
         viewModelScope.launch(Dispatchers.Default) {
             _documents.value?.let {
-                val itemList = it.toMutableList()
-                for (index in itemList.indices) {
-                    if (itemList[index].isbn == document.isbn) {
-                        itemList[index] = document
-                        withContext(Dispatchers.Main) {
-                            _documents.value = itemList
-                        }
-                        return@let
+                it.filter { item -> document.isbn == item.isbn }
+                    .map { filterItem ->
+                        filterItem.isLike = document.isLike
                     }
+                withContext(Dispatchers.Main) {
+                    _documents.value = it
                 }
             }
         }
