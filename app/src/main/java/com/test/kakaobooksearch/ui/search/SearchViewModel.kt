@@ -79,13 +79,19 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     }
 
     // editText 감지
-    fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+    fun onTextChanged(s: CharSequence) {
         onSearchProcess(s.toString(), true)
     }
 
     // 리스트 아이템 클릭
     fun onBookItemClicked(document: Document) {
         _openBookDetail.value = Event(document)
+    }
+
+    //recyclerView 터치리스너
+    fun onTouchListener(): Boolean {
+        _hideKeyboard.value = Event(Unit)
+        return false
     }
 
     // 상세 정보 반영 (좋아요)
