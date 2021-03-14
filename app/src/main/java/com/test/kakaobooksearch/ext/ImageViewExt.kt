@@ -12,9 +12,10 @@ fun ImageView.setImageUrl(url: String?) {
         if (it.isNotEmpty()) {
             Glide.with(context)
                 .load(url)
+                .error(R.drawable.ic_no_image)
                 .into(this@setImageUrl)
         } else {
-            setImageDrawable(null)
+            setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_no_image))
         }
     }
 }
