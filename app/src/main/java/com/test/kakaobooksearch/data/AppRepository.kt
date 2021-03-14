@@ -32,9 +32,7 @@ class AppRepository @Inject constructor(
         val metaDtoTimestamp = metaDto?.timeStamp ?: 0
         return if (isNeedNetwork(metaDtoTimestamp)) {
             // 네트워크 연결이 필요한 경우
-            val remoteKakaoBook = remoteDataSource.getSearchBooks(queryMap)
-            saveKaKaoBookInDB(keyword, page, size, metaDto, remoteKakaoBook)
-            remoteKakaoBook
+            getKakaoBookInApi(queryMap, keyword, page, size, metaDto)
         } else {
             // DB 정보 사용할 경우
             // DB 정보 가공
@@ -46,11 +44,27 @@ class AppRepository @Inject constructor(
             if (result != null && result.documents.isNotEmpty()) {
                 result
             } else {
-                val remoteKakaoBook = remoteDataSource.getSearchBooks(queryMap)
-                saveKaKaoBookInDB(keyword, page, size, metaDto, remoteKakaoBook)
-                remoteKakaoBook
+                // 네트워크 연결이 필요한 경우
+                getKakaoBookInApi(queryMap, keyword, page, size, metaDto)
             }
         }
+    }
+
+    /**
+     * Remote 데이타 처리
+     */
+    private suspend fun getKakaoBookInApi(
+        queryMap: Map<String, String>,
+        keyword: String,
+        page: Int,
+        size: Int,
+        metaDto: MetaDto?
+    ): KakaoBook {
+        val remoteKakaoBook = remoteDataSource.getSearchBooks(queryMap)
+        if (remoteKakaoBook.meta.pageableCount != 0) {
+            saveKaKaoBookInDB(keyword, page, size, metaDto, remoteKakaoBook)
+        }
+        return remoteKakaoBook
     }
 
     /**

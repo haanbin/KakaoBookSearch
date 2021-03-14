@@ -154,7 +154,6 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
             job.cancel()
         }
         if (keyword.isNullOrEmpty()) {
-            onShowToast("키워드를 입력해주세요")
             setResetData()
             return
         }
