@@ -60,7 +60,6 @@ fun TextView.setBooPrice(price: String, salePrice: String) {
     requireAll = false
 )
 fun TextView.setListToString(list: List<String>, listSeparator: String?) {
-
     text = if (list.isEmpty()) {
         ""
     } else {
