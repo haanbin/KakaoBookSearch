@@ -11,7 +11,7 @@ import java.util.*
 fun TextView.setTimeStampFormat(timeStamp: String) {
     text = try {
         val sdf1 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.KOREA)
-        val sdf2 = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+        val sdf2 = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
         val date = sdf1.parse(timeStamp)
         date?.let {
             sdf2.format(it)

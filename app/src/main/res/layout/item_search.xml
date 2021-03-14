@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.text.TextUtils" />
+
         <variable
             name="model"
             type="com.test.kakaobooksearch.data.entities.Document" />
@@ -29,14 +31,14 @@
             <ImageView
                 android:id="@+id/item_search_book_imageView"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginVertical="5dp"
                 android:layout_marginStart="5dp"
-                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                bind:imageUrl="@{model.thumbnail}" />
+                bind:imageUrl="@{model.thumbnail}"
+                tools:src="@drawable/ic_no_image" />
 
             <TextView
                 android:id="@+id/item_search_book_name_textView"
@@ -54,16 +56,16 @@
                 app:layout_constraintStart_toEndOf="@id/item_search_book_imageView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_max="wrap"
-                tools:text="책이름책이름책이름책이름책이름책이름" />
+                tools:text="책이름책이름책이름책이름책이름책이름책이름책이름책이름책이름책이름책이름" />
 
             <TextView
                 android:id="@+id/item_search_book_release_textView"
                 style="@style/AppTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/item_search_book_name_textView"
+                android:layout_marginEnd="5dp"
                 app:layout_constraintEnd_toStartOf="@id/item_search_like_imageView"
+                app:layout_constraintTop_toTopOf="@id/item_search_book_name_textView"
                 bind:timeStampFormat="@{model.datetime}"
                 tools:text="출시일" />
 
@@ -86,7 +88,7 @@
                 android:layout_marginVertical="5dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="@{model.contents}"
+                android:text="@{TextUtils.isEmpty(model.contents) ? @string/empty_content : model.contents}"
                 app:layout_constraintEnd_toStartOf="@id/item_search_like_imageView"
                 app:layout_constraintStart_toEndOf="@id/item_search_book_imageView"
                 app:layout_constraintTop_toBottomOf="@id/item_search_barrier"
@@ -108,13 +110,12 @@
 
             <ImageView
                 android:id="@+id/item_search_like_imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginEnd="5dp"
                 android:src="@{model.like ? @drawable/ic_like_on : @drawable/ic_like_off}"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@id/item_search_book_name_textView"
                 tools:src="@drawable/ic_like_off" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

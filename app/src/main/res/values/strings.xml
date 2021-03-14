@@ -6,4 +6,5 @@
     <string name="book_detail_move">도서 상세 이동</string>
     <string name="add_author">(저)</string>
     <string name="add_translate">(변)</string>
+    <string name="empty_content">책 소개 없음</string>
 </resources>
