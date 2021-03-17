@@ -1,6 +1,8 @@
 package com.test.kakaobooksearch.data.api
 
 import com.test.kakaobooksearch.data.entities.KakaoBook
+import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
@@ -11,5 +13,11 @@ interface RetrofitService {
         @QueryMap
         queryMap: Map<String, String>
     ): KakaoBook
+
+    @GET("v3/search/book")
+    fun getSearchBooksRx(
+        @QueryMap
+        queryMap: Map<String, String>
+    ): Single<KakaoBook>
 
 }

@@ -6,10 +6,10 @@ import com.test.kakaobooksearch.data.entities.Meta
 
 @Entity(tableName = "META")
 data class MetaDto(
-    val keyword: String,
-    val totalCount: Int,
-    val pageableCount: Int,
-    val timeStamp: Long
+    val keyword: String ="",
+    val totalCount: Int = 0,
+    val pageableCount: Int = 0,
+    val timeStamp: Long = 0
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

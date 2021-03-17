@@ -6,9 +6,13 @@ import com.test.kakaobooksearch.data.local.dto.MetaDto
 import com.test.kakaobooksearch.data.local.dto.toDocument
 import com.test.kakaobooksearch.data.remote.RemoteDataSource
 import com.test.kakaobooksearch.util.Constants
+import com.test.kakaobooksearch.util.getSystemTimeToDateFormat
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,6 +21,78 @@ class AppRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource
 ) : AppDataSource {
+
+    override fun getSearchBooksRx(queryMap: Map<String, String>): Observable<KakaoBook> {
+        val keyword = queryMap[Constants.QUERY] ?: ""
+        val size = queryMap[Constants.SIZE]?.toInt() ?: Constants.DEFAULT_SIZE_VALUE
+        val page = queryMap[Constants.PAGE]?.toInt() ?: Constants.DEFAULT_PAGE_VALUE
+        return Observable.concatArrayEagerDelayError(
+            localDataSource.getMetaRx(keyword)
+                .flatMap { metaDto ->
+                        localDataSource.getDocumentsRx(metaDto.id, getStart(page, size), size)
+                            .map { list ->
+                                KakaoBook(list.toDocument(), metaDto.toMeta())
+                            }
+                }.subscribeOn(Schedulers.io()),
+            Observable.defer {
+                localDataSource.getMetaRx(keyword)
+                    .onErrorReturnItem(MetaDto("", 0, 0, 0))
+                    .flatMap { metaDto ->
+                        if (isNeedNetwork(metaDto.timeStamp)) {
+                            remoteDataSource.getSearchBooksRx(queryMap)
+                                .flatMap {
+                                    when {
+                                        it.meta.pageableCount == 0 -> {
+                                            Observable.empty()
+                                        }
+                                        page == 1 -> {
+                                            localDataSource.removeMetaRx(keyword)
+                                                .andThen(
+                                                    localDataSource.removeDocumentsRx(metaDto.id)
+                                                        .andThen(localDataSource.saveMetaRx(
+                                                            it.meta,
+                                                            keyword
+                                                        )
+                                                            .flatMap { metaId ->
+                                                                localDataSource.saveDocumentRx(
+                                                                    it.documents,
+                                                                    metaId
+                                                                )
+                                                                    .andThen(Observable.just(it))
+                                                            })
+                                                )
+                                        }
+                                        else -> {
+                                            val start = if (getStart(page, size) == 0) {
+                                                0
+                                            } else {
+                                                getStart(page, size) - 1
+                                            }
+                                            localDataSource.getDocumentRx(metaDto.id, start)
+                                                .flatMap { documentDto ->
+                                                    localDataSource.removeDocumentsOverIdRx(
+                                                        metaDto.id,
+                                                        documentDto.id
+                                                    )
+                                                        .andThen(
+                                                            localDataSource.saveDocumentRx(
+                                                                it.documents,
+                                                                metaDto.id
+                                                            )
+                                                        )
+                                                        .andThen(Observable.just(it))
+                                                }
+                                        }
+                                    }
+                                }
+                                .subscribeOn(Schedulers.io())
+                        } else {
+                            Observable.empty()
+                        }
+                    }
+            }.subscribeOn(Schedulers.io())
+        )
+    }
 
     /**
      * 캐싱된 데이터의 입력시간이

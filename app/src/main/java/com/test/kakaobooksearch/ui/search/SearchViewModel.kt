@@ -5,18 +5,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.test.kakaobooksearch.base.BaseViewModel
+import com.test.kakaobooksearch.data.AppRepository
 import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.data.entities.KakaoBookReqModel
+import com.test.kakaobooksearch.domain.GetSearchBooksRxUseCase
 import com.test.kakaobooksearch.domain.GetSearchBooksUseCase
 import com.test.kakaobooksearch.util.Constants
 import com.test.kakaobooksearch.util.Event
+import com.test.kakaobooksearch.util.getSystemTimeToDateFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: GetSearchBooksUseCase) :
+class SearchViewModel @Inject constructor(
+    private val getSearchBooksUseCase: GetSearchBooksUseCase,
+    private val getSearchBooksRxUseCase: GetSearchBooksRxUseCase
+) :
     BaseViewModel() {
 
     private val _loading = MutableLiveData(false)
@@ -58,7 +66,8 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     val onLoad = {
         if (isNeedLoadMore()) {
             setPageUp()
-            getSearchBooks(null, true)
+            getSearchBooksRx()
+//            getSearchBooks(null, true)
         }
     }
 
@@ -144,6 +153,28 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         }
     }
 
+    // 도서 검색하기
+    private fun getSearchBooksRx() {
+        getSearchBooksRxUseCase(reqModel.toMap())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ kakaoBook ->
+                if (reqModel.page == 1) {
+                    pageableCount = kakaoBook.meta.pageableCount
+                }
+                if (kakaoBook.meta.totalCount == 0) {
+                    onShowToast("검색결과가 존재하지 않습니다.")
+                    setResetData()
+                } else {
+                    val itemList = (_documents.value ?: listOf()).toMutableList()
+                    itemList.addAll(kakaoBook.documents)
+                    _documents.value = itemList
+                }
+            }, {
+                Timber.d("Exceptions : ${it.message}")
+                onShowToast("예기치 못한 오류가 발생하였습니다.")
+            }).addTo(compositeDisposable)
+    }
+
     // 검색 프로세스
     private fun onSearchProcess(keyword: String?, isAuto: Boolean) {
         // 실행중인 검색 작업이 있으면 제거
@@ -156,7 +187,8 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         }
         setResetData()
         setSearchKeyword(keyword)
-        getSearchBooks(isAuto, false)
+//        getSearchBooks(isAuto, false)
+        getSearchBooksRx()
     }
 
     // paging 호출 판단
