@@ -46,48 +46,42 @@ class AppRepository @Inject constructor(
                         if (isNeedNetwork(metaDto.timeStamp)) {
                             remoteDataSource.getSearchBooksRx(queryMap)
                                 .flatMap {
-                                    when {
-                                        it.meta.pageableCount == 0 -> {
-                                            Observable.empty()
-                                        }
-                                        page == 1 -> {
-                                            localDataSource.removeMetaRx(keyword)
-                                                .andThen(
-                                                    localDataSource.removeDocumentsRx(metaDto.id)
-                                                        .andThen(localDataSource.saveMetaRx(
-                                                            it.meta,
-                                                            keyword
-                                                        )
-                                                            .flatMap { metaId ->
-                                                                localDataSource.saveDocumentRx(
-                                                                    it.documents,
-                                                                    metaId
-                                                                )
-                                                                    .andThen(Observable.just(it))
-                                                            })
-                                                )
-                                        }
-                                        else -> {
-                                            val start = if (getStart(page, size) == 0) {
-                                                0
-                                            } else {
-                                                getStart(page, size) - 1
-                                            }
-                                            localDataSource.getDocumentRx(metaDto.id, start)
-                                                .flatMap { documentDto ->
-                                                    localDataSource.removeDocumentsOverIdRx(
-                                                        metaDto.id,
-                                                        documentDto.id
+                                    if (page == 1) {
+                                        localDataSource.removeMetaRx(keyword)
+                                            .andThen(
+                                                localDataSource.removeDocumentsRx(metaDto.id)
+                                                    .andThen(localDataSource.saveMetaRx(
+                                                        it.meta,
+                                                        keyword
                                                     )
-                                                        .andThen(
+                                                        .flatMap { metaId ->
                                                             localDataSource.saveDocumentRx(
                                                                 it.documents,
-                                                                metaDto.id
+                                                                metaId
                                                             )
-                                                        )
-                                                        .andThen(Observable.just(it))
-                                                }
+                                                                .andThen(Observable.just(it))
+                                                        })
+                                            )
+                                    } else {
+                                        val start = if (getStart(page, size) == 0) {
+                                            0
+                                        } else {
+                                            getStart(page, size) - 1
                                         }
+                                        localDataSource.getDocumentRx(metaDto.id, start)
+                                            .flatMap { documentDto ->
+                                                localDataSource.removeDocumentsOverIdRx(
+                                                    metaDto.id,
+                                                    documentDto.id
+                                                )
+                                                    .andThen(
+                                                        localDataSource.saveDocumentRx(
+                                                            it.documents,
+                                                            metaDto.id
+                                                        )
+                                                    )
+                                                    .andThen(Observable.just(it))
+                                            }
                                     }
                                 }
                                 .subscribeOn(Schedulers.io())
