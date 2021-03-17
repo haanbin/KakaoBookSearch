@@ -28,11 +28,16 @@ class AppRepository @Inject constructor(
         val page = queryMap[Constants.PAGE]?.toInt() ?: Constants.DEFAULT_PAGE_VALUE
         return Observable.concatArrayEagerDelayError(
             localDataSource.getMetaRx(keyword)
+                .onErrorReturnItem(MetaDto("", 0, 0, 0))
                 .flatMap { metaDto ->
+                    if (metaDto.timeStamp == 0L) {
+                        Observable.empty()
+                    } else {
                         localDataSource.getDocumentsRx(metaDto.id, getStart(page, size), size)
                             .map { list ->
                                 KakaoBook(list.toDocument(), metaDto.toMeta())
                             }
+                    }
                 }.subscribeOn(Schedulers.io()),
             Observable.defer {
                 localDataSource.getMetaRx(keyword)
