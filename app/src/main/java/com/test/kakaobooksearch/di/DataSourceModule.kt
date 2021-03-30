@@ -1,7 +1,7 @@
 package com.test.kakaobooksearch.di
 
-import com.test.kakaobooksearch.data.AppDataSource
 import com.test.kakaobooksearch.data.AppRepository
+import com.test.kakaobooksearch.data.AppRepositoryImpl
 import com.test.kakaobooksearch.data.local.LocalDataSource
 import com.test.kakaobooksearch.data.local.LocalDataSourceImpl
 import com.test.kakaobooksearch.data.remote.RemoteDataSource
@@ -16,7 +16,7 @@ import dagger.hilt.components.SingletonComponent
 abstract class DataSourceModule{
 
     @Binds
-    abstract fun bindAppRepository(appRepository: AppRepository): AppDataSource
+    abstract fun bindAppRepository(appRepository: AppRepositoryImpl): AppRepository
 
     @Binds
     abstract fun bindLocalDataSource(localDataSource: LocalDataSourceImpl): LocalDataSource
