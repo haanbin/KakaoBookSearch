@@ -48,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:onClick="@{() -> vm.onLikeClicked()}"
                 android:padding="10dp"
-                android:src="@{vm.document.like ? @drawable/ic_like_on : @drawable/ic_like_off}"
+                android:src="@{vm.like ? @drawable/ic_like_on : @drawable/ic_like_off}"
                 tools:src="@drawable/ic_like_off" />
         </LinearLayout>
 

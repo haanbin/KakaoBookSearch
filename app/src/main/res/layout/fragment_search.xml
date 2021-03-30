@@ -70,7 +70,7 @@
             app:layout_constraintVertical_bias="0"
             bind:documentData="@{vm.documents}"
             bind:onLoad="@{vm.onLoad}"
-            bind:searchRecyclerViewAttrTest="@{vm}"
+            bind:searchRecyclerViewAttr="@{vm}"
             bind:threshold="@{10}"
             tools:itemCount="2"
             tools:listitem="@layout/item_search" />

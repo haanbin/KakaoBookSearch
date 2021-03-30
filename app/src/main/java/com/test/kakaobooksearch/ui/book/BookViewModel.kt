@@ -16,6 +16,10 @@ class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewMode
     val document: LiveData<Document>
         get() = _document
 
+    private val _isLike = MutableLiveData<Boolean>()
+    val isLike: LiveData<Boolean>
+        get() = _isLike
+
     private val _backAction = MutableLiveData<Event<Unit>>()
     val backAction: LiveData<Event<Unit>>
         get() = _backAction
@@ -32,6 +36,7 @@ class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewMode
         val document = handle.get("document") as? Document
         document?.let {
             _document.value = it
+            _isLike.value = it.isLike
         } ?: run {
             onShowToast("상세정보가 정확하지 않습니다.")
             _backAction.value = Event(Unit)
@@ -40,10 +45,12 @@ class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewMode
 
     // 좋아요 클릭
     fun onLikeClicked() {
-        _document.value?.let {
-            it.isLike = !it.isLike
-            _document.value = it
-            _changeDocumentAction.value = Event(it)
+        _isLike.value?.let { isLike ->
+            _isLike.value = !isLike
+            _document.value?.let {
+                it.isLike = !isLike
+                _changeDocumentAction.value = Event(it)
+            }
         }
     }
 

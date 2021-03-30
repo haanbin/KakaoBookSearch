@@ -85,7 +85,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
 
     // 리스트 아이템 클릭
     fun onBookItemClicked(document: Document) {
-        _openBookDetail.value = Event(document)
+        _openBookDetail.value = Event(document.copy())
     }
 
     //recyclerView 터치리스너
@@ -97,13 +97,16 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     // 상세 정보 반영 (좋아요)
     fun setDocumentChangeProcess(document: Document) {
         viewModelScope.launch(Dispatchers.Default) {
-            _documents.value?.let {
-                it.filter { item -> document.isbn == item.isbn }
-                    .map { filterItem ->
-                        filterItem.isLike = document.isLike
+            (_documents.value ?: listOf()).toMutableList().let { list ->
+                val tempList = list.map {
+                    if (document.isbn == it.isbn) {
+                        document
+                    } else {
+                        it
                     }
+                }
                 withContext(Dispatchers.Main) {
-                    _documents.value = it
+                    _documents.value = tempList
                 }
             }
         }

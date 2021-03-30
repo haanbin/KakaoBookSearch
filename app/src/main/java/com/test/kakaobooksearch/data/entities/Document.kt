@@ -18,9 +18,9 @@ data class Document(
     val thumbnail: String,
     val title: String,
     val translators: List<String>,
-    val url: String
-) : Parcelable {
+    val url: String,
     var isLike: Boolean = false
+) : Parcelable {
 
     constructor(parcel: Parcel) : this(
         parcel.createStringArrayList() ?: mutableListOf(),
@@ -34,9 +34,9 @@ data class Document(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.createStringArrayList() ?: mutableListOf(),
-        parcel.readString() ?: ""
-    ) {
-    }
+        parcel.readString() ?: "",
+        parcel.readByte() != 0.toByte()
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeStringList(authors)
@@ -51,6 +51,8 @@ data class Document(
         parcel.writeString(title)
         parcel.writeStringList(translators)
         parcel.writeString(url)
+        parcel.writeByte(if (isLike) 1 else 0)
+
     }
 
     override fun describeContents(): Int {

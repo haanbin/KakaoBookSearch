@@ -10,10 +10,10 @@ import com.test.kakaobooksearch.util.EndlessRecyclerViewScrollListener
 
 
 @BindingAdapter(
-    "bind:searchRecyclerViewAttrTest",
+    "bind:searchRecyclerViewAttr",
     "bind:documentData"
 )
-fun RecyclerView.setUserRecyclerViewAttrTest(
+fun RecyclerView.setUserRecyclerViewAttr(
     viewModel: SearchViewModel,
     documents: List<Document>?
 ) {
