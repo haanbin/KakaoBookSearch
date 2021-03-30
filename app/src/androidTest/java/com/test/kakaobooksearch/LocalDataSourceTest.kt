@@ -35,7 +35,7 @@ class LocalDataSourceTest {
 
     @Test
     fun localDataSourceTest() = runBlocking {
-        localDataSource.saveKakaoBook(KakaoBook(listOf(), Meta(10)), "테스트")
+        localDataSource.saveMeta(Meta(1, 1), "테스트")
         val metaDto = localDataSource.getMeta("테스트")
         println("metaDto : $metaDto")
         Assert.assertNotNull(metaDto)
