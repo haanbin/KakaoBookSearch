@@ -22,7 +22,7 @@ fun RecyclerView.setUserRecyclerViewAttr(
         this.adapter = it
     }
     documents?.let {
-        adapter.setData(it)
+        adapter.submitList(it)
     }
 }
 
