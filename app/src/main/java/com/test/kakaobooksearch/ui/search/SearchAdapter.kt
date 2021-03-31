@@ -25,7 +25,7 @@ class SearchAdapter(private val viewModel: SearchViewModel) :
         holder.bindTo(getItem(position), viewModel)
     }
 
-    inner class SearchViewHolder(private val binding: ItemSearchBinding) :
+    class SearchViewHolder(private val binding: ItemSearchBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindTo(document: Document, viewModel: SearchViewModel) {
