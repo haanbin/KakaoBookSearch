@@ -40,7 +40,7 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
     }
 
     private fun onBaseObserve() {
-        viewModel.showToast.observe(viewLifecycleOwner, Observer { event ->
+        viewModel.showToast.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let {
                 showToast(it)
             }

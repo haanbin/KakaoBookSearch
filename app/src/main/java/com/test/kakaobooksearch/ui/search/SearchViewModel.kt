@@ -7,8 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.test.kakaobooksearch.base.BaseViewModel
 import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.data.entities.KakaoBookReqModel
+import com.test.kakaobooksearch.data.entities.Result
 import com.test.kakaobooksearch.domain.GetSearchBooksUseCase
 import com.test.kakaobooksearch.util.Constants
+import com.test.kakaobooksearch.util.Constants.MSG_ERROR
+import com.test.kakaobooksearch.util.Constants.MSG_LIST_EMPTY
+import com.test.kakaobooksearch.util.Constants.MSG_SERVER_ERROR
 import com.test.kakaobooksearch.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -51,7 +55,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         // 여기서 예외 처리
         _loading.value = false
         Timber.d("Exceptions : ${throwable.message}")
-        onShowToast("예기치 못한 오류가 발생하였습니다.")
+        onShowToast(MSG_ERROR)
     }
 
     // 더 불러오기
@@ -119,21 +123,31 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                 if (!isLoadMore) {
                     _loading.value = true
                 }
-                val kakaoBook = getSearchBooksUseCase(reqModel.toMap())
-                if (reqModel.page == 1) {
-                    pageableCount = kakaoBook.meta.pageableCount
-                }
-                if (kakaoBook.meta.totalCount == 0) {
-                    isAuto?.let { flag ->
-                        if (!flag) {
-                            onShowToast("검색결과가 존재하지 않습니다.")
+                when (val kakaoBookResult = getSearchBooksUseCase(reqModel.toMap())) {
+                    is Result.Success -> {
+                        val kakaoBook = kakaoBookResult.data
+                        if (reqModel.page == 1) {
+                            pageableCount = kakaoBook.meta.pageableCount
+                        }
+                        if (kakaoBook.meta.totalCount == 0) {
+                            isAuto?.let { flag ->
+                                if (!flag) {
+                                    onShowToast(MSG_LIST_EMPTY)
+                                }
+                            }
+                            setResetData()
+                        } else {
+                            val itemList = (_documents.value ?: listOf()).toMutableList()
+                            itemList.addAll(kakaoBook.documents)
+                            _documents.value = itemList
                         }
                     }
-                    setResetData()
-                } else {
-                    val itemList = (_documents.value ?: listOf()).toMutableList()
-                    itemList.addAll(kakaoBook.documents)
-                    _documents.value = itemList
+                    is Result.ErrorBody -> {
+                        onShowToast(MSG_SERVER_ERROR)
+                    }
+                    is Result.Error -> {
+                        onShowToast(MSG_ERROR)
+                    }
                 }
                 if (!isLoadMore) {
                     _loading.value = false

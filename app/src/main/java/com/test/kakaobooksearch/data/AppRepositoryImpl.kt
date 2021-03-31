@@ -1,11 +1,14 @@
 package com.test.kakaobooksearch.data
 
 import com.test.kakaobooksearch.data.entities.KakaoBook
+import com.test.kakaobooksearch.data.entities.Result
 import com.test.kakaobooksearch.data.local.LocalDataSource
 import com.test.kakaobooksearch.data.local.dto.MetaDto
 import com.test.kakaobooksearch.data.local.dto.toDocument
 import com.test.kakaobooksearch.data.remote.RemoteDataSource
 import com.test.kakaobooksearch.util.Constants
+import com.test.kakaobooksearch.util.Constants.RESULT_ERROR_BODY_NULL
+import com.test.kakaobooksearch.util.Constants.RESULT_ERROR_NULL
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +27,7 @@ class AppRepositoryImpl @Inject constructor(
      * 작으면 로컬 데이타
      * 크면 리모트 데이타
      */
-    override suspend fun getSearchBooks(queryMap: Map<String, String>): KakaoBook {
+    override suspend fun getSearchBooks(queryMap: Map<String, String>): Result<KakaoBook> {
         val keyword = queryMap[Constants.QUERY] ?: ""
         val size = queryMap[Constants.SIZE]?.toInt() ?: Constants.DEFAULT_SIZE_VALUE
         val page = queryMap[Constants.PAGE]?.toInt() ?: Constants.DEFAULT_PAGE_VALUE
@@ -42,7 +45,7 @@ class AppRepositoryImpl @Inject constructor(
             }
             // list 비어있을 경우 remote 호출
             if (result != null && result.documents.isNotEmpty()) {
-                result
+                Result.Success(result)
             } else {
                 // 네트워크 연결이 필요한 경우
                 getKakaoBookInApi(queryMap, keyword, page, size, metaDto)
@@ -59,12 +62,20 @@ class AppRepositoryImpl @Inject constructor(
         page: Int,
         size: Int,
         metaDto: MetaDto?
-    ): KakaoBook {
+    ): Result<KakaoBook> {
         val remoteKakaoBook = remoteDataSource.getSearchBooks(queryMap)
-        if (remoteKakaoBook.meta.pageableCount != 0) {
-            saveKaKaoBookInDB(keyword, page, size, metaDto, remoteKakaoBook)
+        if (remoteKakaoBook.isSuccessful) {
+            remoteKakaoBook.body()?.let {
+                if (it.meta.pageableCount != 0) {
+                    saveKaKaoBookInDB(keyword, page, size, metaDto, it)
+                }
+                return Result.Success(it)
+            } ?: return Result.Error(RESULT_ERROR_NULL)
+        } else {
+            remoteKakaoBook.errorBody()?.let {
+                return Result.ErrorBody(it)
+            } ?: return Result.Error(RESULT_ERROR_BODY_NULL)
         }
-        return remoteKakaoBook
     }
 
     /**

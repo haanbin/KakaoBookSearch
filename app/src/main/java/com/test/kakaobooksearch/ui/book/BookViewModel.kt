@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.test.kakaobooksearch.util.Event
 import com.test.kakaobooksearch.base.BaseViewModel
 import com.test.kakaobooksearch.data.entities.Document
+import com.test.kakaobooksearch.util.Constants.ARG_DOCUMENT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -33,7 +34,7 @@ class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewMode
         get() = _changeDocumentAction
 
     init {
-        val document = handle.get("document") as? Document
+        val document = handle.get(ARG_DOCUMENT) as? Document
         document?.let {
             _document.value = it
             _isLike.value = it.isLike
