@@ -142,9 +142,11 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                     }
                     is Result.ErrorBody -> {
                         onShowToast(R.string.server_error)
+                        Timber.d("Result.ErrorBody : ${kakaoBookResult.responseBody}")
                     }
                     is Result.Error -> {
                         onShowToast(R.string.error)
+                        Timber.d("Result.Error : ${kakaoBookResult.message}")
                     }
                 }
                 if (!isLoadMore) {
