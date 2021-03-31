@@ -7,4 +7,7 @@
     <string name="add_author">(저)</string>
     <string name="add_translate">(변)</string>
     <string name="empty_content">책 소개 없음</string>
+    <string name="error">예기치 못한 오류가 발생하였습니다.</string>
+    <string name="server_error">서버 결과를 수신하지 못하였습니다.</string>
+    <string name="list_empty">검색결과가 존재하지 않습니다.</string>
 </resources>

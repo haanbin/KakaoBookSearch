@@ -15,7 +15,4 @@ object Constants {
     const val ARG_DOCUMENT = "document"
     const val RESULT_ERROR_NULL = "RESULT_IS_NULL"
     const val RESULT_ERROR_BODY_NULL = "RESULT_IS_NULL"
-    const val MSG_ERROR = "예기치 못한 오류가 발생하였습니다."
-    const val MSG_SERVER_ERROR = "서버 결과를 수신하지 못하였습니다."
-    const val MSG_LIST_EMPTY = "검색결과가 존재하지 않습니다."
 }

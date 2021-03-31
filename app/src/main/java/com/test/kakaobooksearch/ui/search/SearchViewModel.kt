@@ -4,15 +4,13 @@ import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.test.kakaobooksearch.R
 import com.test.kakaobooksearch.base.BaseViewModel
 import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.data.entities.KakaoBookReqModel
 import com.test.kakaobooksearch.data.entities.Result
 import com.test.kakaobooksearch.domain.GetSearchBooksUseCase
 import com.test.kakaobooksearch.util.Constants
-import com.test.kakaobooksearch.util.Constants.MSG_ERROR
-import com.test.kakaobooksearch.util.Constants.MSG_LIST_EMPTY
-import com.test.kakaobooksearch.util.Constants.MSG_SERVER_ERROR
 import com.test.kakaobooksearch.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -55,7 +53,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         // 여기서 예외 처리
         _loading.value = false
         Timber.d("Exceptions : ${throwable.message}")
-        onShowToast(MSG_ERROR)
+        onShowToast(R.string.error)
     }
 
     // 더 불러오기
@@ -132,7 +130,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                         if (kakaoBook.meta.totalCount == 0) {
                             isAuto?.let { flag ->
                                 if (!flag) {
-                                    onShowToast(MSG_LIST_EMPTY)
+                                    onShowToast(R.string.list_empty)
                                 }
                             }
                             setResetData()
@@ -143,10 +141,10 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                         }
                     }
                     is Result.ErrorBody -> {
-                        onShowToast(MSG_SERVER_ERROR)
+                        onShowToast(R.string.server_error)
                     }
                     is Result.Error -> {
-                        onShowToast(MSG_ERROR)
+                        onShowToast(R.string.error)
                     }
                 }
                 if (!isLoadMore) {
