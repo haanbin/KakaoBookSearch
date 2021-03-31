@@ -17,7 +17,9 @@ fun RecyclerView.setUserRecyclerViewAttr(
     viewModel: SearchViewModel,
     documents: List<Document>?
 ) {
-    itemAnimator = null
+    if (itemAnimator != null){
+        itemAnimator = null
+    }
     val adapter = adapter as? SearchAdapter ?: SearchAdapter(viewModel).also {
         this.adapter = it
     }
