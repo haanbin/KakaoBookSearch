@@ -48,7 +48,6 @@ dependencies {
     implementation deps.activity
     implementation deps.fragment
 
-    implementation deps.coroutines.core
     implementation deps.coroutines.android
     testImplementation deps.coroutines.test
 
@@ -66,10 +65,8 @@ dependencies {
 
     implementation deps.hilt.android
     kapt deps.hilt.complier
-    implementation deps.hilt.viewmodel
-    kapt deps.hilt.viewmodel_complier
     androidTestImplementation deps.hilt.test
-    kaptAndroidTest deps.hilt.test_kotlin
+    kaptAndroidTest deps.hilt.complier
 
     implementation deps.navigation.fragment
     implementation deps.navigation.ui
