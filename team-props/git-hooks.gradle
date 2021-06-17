@@ -10,7 +10,7 @@ task copyGitHooks(type: Copy) {
         rename '(.*).sh', '$1'
     }
     into "${rootDir}/.git/hooks"
-    //onlyIf { isLinuxOrMacOs() }
+    onlyIf { isLinuxOrMacOs() }
 }
 
 task installGitHooks(type: Exec) {
@@ -20,7 +20,7 @@ task installGitHooks(type: Exec) {
     commandLine 'chmod'
     args '-R', '+x', '.git/hooks/'
     dependsOn copyGitHooks
-    //onlyIf { isLinuxOrMacOs() }
+    onlyIf { isLinuxOrMacOs() }
     doLast { logger.info('Git hook installed successfully.') }
 }
 
