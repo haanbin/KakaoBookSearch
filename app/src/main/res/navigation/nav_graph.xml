@@ -22,6 +22,6 @@
         tools:layout="@layout/fragment_book">
         <argument
             android:name="document"
-            app:argType="com.test.kakaobooksearch.data.entities.Document" />
+            app:argType="com.test.kakaobooksearch.dto.Document" />
     </fragment>
 </navigation>

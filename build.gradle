@@ -1,6 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     apply from: 'versions.gradle'
+    ext {
+        versions.kotlin = '1.5.10'
+        versions.kotlin = '1.5.10'
+        versions.kotlin = '1.5.10'
+    }
 
     addRepos(repositories)
 
@@ -19,3 +24,10 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+def teamPropsFile(propsFile) {
+    def teamPropsDir = file('team-props')
+    return new File(teamPropsDir, propsFile)
+}
+
+apply from: teamPropsFile('git-hooks.gradle')

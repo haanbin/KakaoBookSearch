@@ -69,5 +69,4 @@ internal class EndlessRecyclerViewScrollListener(
     companion object {
         internal const val DEFAULT_VISIBLE_THRESHOLD = 5
     }
-
 }

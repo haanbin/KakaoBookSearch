@@ -25,23 +25,32 @@ class SearchFragment :
 
     override fun onObserve() {
         with(viewModel) {
-            hideKeyboard.observe(viewLifecycleOwner, { event ->
-                event.getContentIfNotHandled()?.let {
-                    hideKeyboard()
+            hideKeyboard.observe(
+                viewLifecycleOwner,
+                { event ->
+                    event.getContentIfNotHandled()?.let {
+                        hideKeyboard()
+                    }
                 }
-            })
-            openBookDetail.observe(viewLifecycleOwner, { event ->
-                event.getContentIfNotHandled()?.let {
-                    openBookFragment(it)
+            )
+            openBookDetail.observe(
+                viewLifecycleOwner,
+                { event ->
+                    event.getContentIfNotHandled()?.let {
+                        openBookFragment(it)
+                    }
                 }
-            })
+            )
         }
         with(sharedViewModel) {
-            changeDocumentAction.observe(viewLifecycleOwner, { event ->
-                event.getContentIfNotHandled()?.let {
-                    viewModel.setDocumentChangeProcess(it)
+            changeDocumentAction.observe(
+                viewLifecycleOwner,
+                { event ->
+                    event.getContentIfNotHandled()?.let {
+                        viewModel.setDocumentChangeProcess(it)
+                    }
                 }
-            })
+            )
         }
     }
 
@@ -58,7 +67,6 @@ class SearchFragment :
                 inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
                 inputMethodManager.isAcceptingText
             }
-
         }
     }
 }

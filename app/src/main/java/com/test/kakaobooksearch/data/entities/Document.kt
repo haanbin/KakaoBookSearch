@@ -52,7 +52,6 @@ data class Document(
         parcel.writeStringList(translators)
         parcel.writeString(url)
         parcel.writeByte(if (isLike) 1 else 0)
-
     }
 
     override fun describeContents(): Int {

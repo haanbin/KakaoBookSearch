@@ -3,10 +3,10 @@ package com.test.kakaobooksearch.ui.book
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import com.test.kakaobooksearch.util.Event
 import com.test.kakaobooksearch.base.BaseViewModel
 import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.util.Constants.ARG_DOCUMENT
+import com.test.kakaobooksearch.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -60,7 +60,7 @@ class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewMode
         _backAction.value = Event(Unit)
     }
 
-    //URL 연결
+    // URL 연결
     fun onOpenUrl(url: String) {
         if (url.isNotEmpty()) {
             _openUrlAction.value = Event(url)

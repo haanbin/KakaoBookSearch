@@ -34,7 +34,6 @@ fun TextView.setUsFormat(price: String) {
     }
 }
 
-
 @BindingAdapter(
     "bind:bookPrice",
     "bind:bookSalePrice"
@@ -69,5 +68,4 @@ fun TextView.setListToString(list: List<String>, listSeparator: String?, listAdd
     } else {
         "$formatText$listAddStringNotNull"
     }
-
 }

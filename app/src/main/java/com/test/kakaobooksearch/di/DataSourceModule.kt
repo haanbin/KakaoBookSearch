@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
 
 @InstallIn(SingletonComponent::class)
 @Module
-abstract class DataSourceModule{
+abstract class DataSourceModule {
 
     @Binds
     abstract fun bindAppRepository(appRepository: AppRepositoryImpl): AppRepository
@@ -23,5 +23,4 @@ abstract class DataSourceModule{
 
     @Binds
     abstract fun bindRemoteDataSource(remoteDataSource: RemoteDataSourceImpl): RemoteDataSource
-
 }

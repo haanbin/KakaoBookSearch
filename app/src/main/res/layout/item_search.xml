@@ -10,7 +10,7 @@
 
         <variable
             name="model"
-            type="com.test.kakaobooksearch.data.entities.Document" />
+            type="com.test.kakaobooksearch.dto.Document" />
 
         <variable
             name="vm"

@@ -8,7 +8,6 @@ import com.test.kakaobooksearch.ui.search.SearchAdapter
 import com.test.kakaobooksearch.ui.search.SearchViewModel
 import com.test.kakaobooksearch.util.EndlessRecyclerViewScrollListener
 
-
 @BindingAdapter(
     "bind:searchRecyclerViewAttr",
     "bind:documentData"
@@ -17,7 +16,7 @@ fun RecyclerView.setUserRecyclerViewAttr(
     viewModel: SearchViewModel,
     documents: List<Document>?
 ) {
-    if (itemAnimator != null){
+    if (itemAnimator != null) {
         itemAnimator = null
     }
     val adapter = adapter as? SearchAdapter ?: SearchAdapter(viewModel).also {

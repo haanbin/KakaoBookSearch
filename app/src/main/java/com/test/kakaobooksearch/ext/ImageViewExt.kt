@@ -2,10 +2,8 @@ package com.test.kakaobooksearch.ext
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.test.kakaobooksearch.R
 
 @BindingAdapter(
     "bind:imageUrl",

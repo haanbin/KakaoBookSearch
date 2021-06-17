@@ -18,5 +18,4 @@ class MainViewModel @Inject constructor() : BaseViewModel() {
     fun onDocumentChange(document: Document) {
         _changeDocumentAction.value = Event(document)
     }
-
 }

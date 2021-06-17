@@ -7,7 +7,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
 import org.junit.*
 import org.junit.runner.RunWith
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
@@ -37,7 +36,4 @@ class GetSearchBooksUseCaseTest {
         val response = getSearchBooksUseCase(queryMap)
         Assert.assertNotNull(response)
     }
-
-
 }
-

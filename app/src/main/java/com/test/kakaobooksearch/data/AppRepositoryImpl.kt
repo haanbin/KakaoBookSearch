@@ -124,5 +124,3 @@ class AppRepositoryImpl @Inject constructor(
      */
     private fun getStart(page: Int, size: Int): Int = (page - 1) * size
 }
-
-

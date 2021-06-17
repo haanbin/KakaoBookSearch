@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.test.kakaobooksearch.util.Event
 
-abstract class BaseViewModel: ViewModel() {
+abstract class BaseViewModel : ViewModel() {
 
     private val _showToast = MutableLiveData<Event<String>>()
     val showToast: LiveData<Event<String>>
@@ -15,11 +15,11 @@ abstract class BaseViewModel: ViewModel() {
     val showToastStringRes: LiveData<Event<Int>>
         get() = _showToastStringRes
 
-    protected fun onShowToast(msg: String){
+    protected fun onShowToast(msg: String) {
         _showToast.value = Event(msg)
     }
 
-    protected fun onShowToast(stringRes: Int){
+    protected fun onShowToast(stringRes: Int) {
         _showToastStringRes.value = Event(stringRes)
     }
 }

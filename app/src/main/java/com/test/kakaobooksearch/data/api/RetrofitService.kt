@@ -12,5 +12,4 @@ interface RetrofitService {
         @QueryMap
         queryMap: Map<String, String>
     ): Response<KakaoBook>
-
 }

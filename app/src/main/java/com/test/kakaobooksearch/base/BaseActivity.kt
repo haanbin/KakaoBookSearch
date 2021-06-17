@@ -23,5 +23,4 @@ abstract class BaseActivity<B : ViewDataBinding, VM : BaseViewModel>(
             setVariable(viewModelVariable, viewModel)
         }
     }
-
 }

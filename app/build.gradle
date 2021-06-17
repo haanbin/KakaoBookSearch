@@ -1,40 +1,15 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-    id 'androidx.navigation.safeargs.kotlin'
 }
 
+apply from: "../commons.gradle"
+
 android {
-    compileSdkVersion build_versions.compile_sdk
-    buildToolsVersion build_versions.build_tools
     defaultConfig {
         applicationId "com.test.kakaobooksearch"
-        minSdkVersion build_versions.min_sdk
-        targetSdkVersion build_versions.target_sdk
-        versionCode 1
-        versionName "1.0"
-//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner "com.test.kakaobooksearch.CustomTestRunner"
-        buildConfigField "String", "SERVER_URL", '"https://dapi.kakao.com/"'
-        buildConfigField "String", "REST_API_KEY", '"75193174377af689e867daa2bcfae81e"'
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
     buildFeatures {
         dataBinding = true
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
 }
 
@@ -51,6 +26,7 @@ dependencies {
     implementation deps.coroutines.android
     testImplementation deps.coroutines.test
 
+    //remove
     implementation deps.room.runtime
     kapt deps.room.compiler
     implementation deps.room.ktx
@@ -59,21 +35,13 @@ dependencies {
     implementation deps.glide.runtime
     kapt deps.glide.compiler
 
+    //remove
     implementation deps.retrofit.runtime
     implementation deps.retrofit.gson
     implementation deps.okhttp_logging_interceptor
-
-    implementation deps.hilt.android
-    kapt deps.hilt.complier
-    androidTestImplementation deps.hilt.test
-    kaptAndroidTest deps.hilt.complier
 
     implementation deps.navigation.fragment
     implementation deps.navigation.ui
 
     implementation deps.timber
-
-    testImplementation deps.junit
-    androidTestImplementation deps.ext_junit
-    androidTestImplementation deps.esspresso_core
 }

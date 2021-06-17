@@ -40,7 +40,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     // 이미 검색중이 항목이 있으면 취소를 위함
     private var job: Job = SupervisorJob()
 
-    //two way binding
+    // two way binding
     val searchKeyword = MutableLiveData<String>()
 
     // API 요청 모델
@@ -90,7 +90,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         _openBookDetail.value = Event(document.copy())
     }
 
-    //recyclerView 터치리스너
+    // recyclerView 터치리스너
     fun onTouchListener(): Boolean {
         _hideKeyboard.value = Event(Unit)
         return false
@@ -199,6 +199,3 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
         }
     }
 }
-
-
-

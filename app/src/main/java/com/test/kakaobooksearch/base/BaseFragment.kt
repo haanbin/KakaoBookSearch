@@ -8,7 +8,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.test.kakaobooksearch.ext.showToast
 
 abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
@@ -41,16 +40,22 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>(
 
     private fun onBaseObserve() {
         with(viewModel) {
-            showToast.observe(viewLifecycleOwner, { event ->
-                event.getContentIfNotHandled()?.let {
-                    showToast(it)
+            showToast.observe(
+                viewLifecycleOwner,
+                { event ->
+                    event.getContentIfNotHandled()?.let {
+                        showToast(it)
+                    }
                 }
-            })
-            showToastStringRes.observe(viewLifecycleOwner, { event ->
-                event.getContentIfNotHandled()?.let {
-                    showToast(getString(it))
+            )
+            showToastStringRes.observe(
+                viewLifecycleOwner,
+                { event ->
+                    event.getContentIfNotHandled()?.let {
+                        showToast(getString(it))
+                    }
                 }
-            })
+            )
         }
     }
 

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.test.kakaobooksearch.BR
 import com.test.kakaobooksearch.R
@@ -16,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class BookFragment : BaseFragment<FragmentBookBinding, BookViewModel>(R.layout.fragment_book) {
 
-
     override val viewModel: BookViewModel by viewModels()
     override val viewModelVariable: Int
         get() = BR.vm
@@ -24,21 +22,30 @@ class BookFragment : BaseFragment<FragmentBookBinding, BookViewModel>(R.layout.f
 
     override fun onObserve() {
         with(viewModel) {
-            backAction.observe(viewLifecycleOwner, { event ->
-                event.getContentIfNotHandled()?.let {
-                    findNavController().popBackStack()
+            backAction.observe(
+                viewLifecycleOwner,
+                { event ->
+                    event.getContentIfNotHandled()?.let {
+                        findNavController().popBackStack()
+                    }
                 }
-            })
-            changeDocumentAction.observe(viewLifecycleOwner, { event ->
-                event.getContentIfNotHandled()?.let {
-                    sharedViewModel.onDocumentChange(it)
+            )
+            changeDocumentAction.observe(
+                viewLifecycleOwner,
+                { event ->
+                    event.getContentIfNotHandled()?.let {
+                        sharedViewModel.onDocumentChange(it)
+                    }
                 }
-            })
-            openUrlAction.observe(viewLifecycleOwner, { event ->
-                event.getContentIfNotHandled()?.let {
-                    openUrl(it)
+            )
+            openUrlAction.observe(
+                viewLifecycleOwner,
+                { event ->
+                    event.getContentIfNotHandled()?.let {
+                        openUrl(it)
+                    }
                 }
-            })
+            )
         }
     }
 
