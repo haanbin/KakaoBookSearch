@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.test.kakaobooksearch.BR
 import com.test.kakaobooksearch.R
 import com.test.kakaobooksearch.base.BaseFragment
@@ -24,7 +26,7 @@ class BookFragment : BaseFragment<FragmentBookBinding, BookViewModel>(R.layout.f
         with(viewModel) {
             backAction.observe(viewLifecycleOwner, { event ->
                 event.getContentIfNotHandled()?.let {
-                    requireActivity().onBackPressed()
+                    findNavController().popBackStack()
                 }
             })
             changeDocumentAction.observe(viewLifecycleOwner, { event ->
