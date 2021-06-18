@@ -8,4 +8,3 @@ data class KakaoBookVo(
 )
 
 fun KakaoBookDto.toPresenter() = KakaoBookVo(documents.toPresenter(), meta.toPresenter())
-
