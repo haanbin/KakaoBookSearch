@@ -1,6 +1,8 @@
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'de.mannodermaus.android-junit5'
+
 apply from: "../ktlint.gradle"
 apply from: "../detekt.gradle"
 
@@ -12,8 +14,12 @@ android {
         targetSdkVersion build_versions.target_sdk
         versionCode 1
         versionName "1.0"
-//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner "com.test.kakaobooksearch.CustomTestRunner"
+
+        // Make sure to use the AndroidJUnitRunner, or a subclass of it. This requires a dependency on androidx.test:runner, too!
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Connect JUnit 5 to the runner
+        testInstrumentationRunnerArgument("runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder")
+
         buildConfigField "String", "SERVER_URL", '"https://dapi.kakao.com/"'
         buildConfigField "String", "REST_API_KEY", '"75193174377af689e867daa2bcfae81e"'
     }
@@ -41,7 +47,14 @@ dependencies {
     androidTestImplementation deps.hilt.test
     kaptAndroidTest deps.hilt.complier
 
-    testImplementation deps.junit
-    androidTestImplementation deps.ext_junit
-    androidTestImplementation deps.esspresso_core
+    testImplementation deps.mockk
+
+    testImplementation deps.junit.junit_jupiter_api
+    testRuntimeOnly deps.junit.junit_jupiter_engine
+
+    androidTestImplementation deps.test_runner
+    androidTestImplementation deps.junit.junit_jupiter_api
+
+    androidTestImplementation deps.junit.android_test_core
+    androidTestRuntimeOnly deps.junit.android_test_runner
 }
