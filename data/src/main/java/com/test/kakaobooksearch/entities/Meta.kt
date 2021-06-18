@@ -18,3 +18,5 @@ data class Meta(
         )
     }
 }
+
+fun Meta.toDomain() = com.test.kakaobooksearch.dto.MetaDto(totalCount, pageableCount)

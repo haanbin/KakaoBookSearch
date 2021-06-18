@@ -40,3 +40,23 @@ fun List<Document>.toDocumentDto(metaId: Long): List<DocumentDto> {
         )
     }
 }
+
+fun List<Document>.toDomain(): List<com.test.kakaobooksearch.dto.DocumentDto> {
+    return map {
+        com.test.kakaobooksearch.dto.DocumentDto(
+            it.authors,
+            it.contents,
+            it.datetime,
+            it.isbn,
+            it.price,
+            it.publisher,
+            it.salePrice,
+            it.status,
+            it.thumbnail,
+            it.title,
+            it.translators,
+            it.url,
+            it.isLike
+        )
+    }
+}
