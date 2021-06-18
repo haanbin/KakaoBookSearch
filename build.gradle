@@ -1,20 +1,15 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     apply from: 'versions.gradle'
-    ext {
-        versions.kotlin = '1.5.10'
-        versions.kotlin = '1.5.10'
-        versions.kotlin = '1.5.10'
-    }
 
     addRepos(repositories)
 
     dependencies {
-        classpath "com.android.tools.build:gradle:${versions.android_gradle_plugin}"
+        classpath deps.android_gradle_plugin
         classpath deps.kotlin.plugin
-        classpath "com.google.dagger:hilt-android-gradle-plugin:${versions.hilt}"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.navigation}"
-        classpath "de.mannodermaus.gradle.plugins:android-junit5:${versions.junit_plugin}"
+        classpath deps.hilt.plugin
+        classpath deps.navigation.plugin
+        classpath deps.junit_plugin
     }
 }
 
