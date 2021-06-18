@@ -4,14 +4,15 @@ import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.test.kakaobooksearch.GetSearchBooksUseCase
 import com.test.kakaobooksearch.R
 import com.test.kakaobooksearch.base.BaseViewModel
-import com.test.kakaobooksearch.data.entities.Document
-import com.test.kakaobooksearch.data.entities.KakaoBookReqModel
-import com.test.kakaobooksearch.data.entities.Result
-import com.test.kakaobooksearch.domain.GetSearchBooksUseCase
+import com.test.kakaobooksearch.dto.ResultDto
 import com.test.kakaobooksearch.util.Constants
 import com.test.kakaobooksearch.util.Event
+import com.test.kakaobooksearch.vo.DocumentVo
+import com.test.kakaobooksearch.vo.KakaoBookReqVo
+import com.test.kakaobooksearch.vo.toPresenter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -25,16 +26,16 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     val loading: LiveData<Boolean>
         get() = _loading
 
-    private val _documents = MutableLiveData<List<Document>>()
-    val documents: LiveData<List<Document>>
+    private val _documents = MutableLiveData<List<DocumentVo>>()
+    val documents: LiveData<List<DocumentVo>>
         get() = _documents
 
     private val _hideKeyboard = MutableLiveData<Event<Unit>>()
     val hideKeyboard: LiveData<Event<Unit>>
         get() = _hideKeyboard
 
-    private val _openBookDetail = MutableLiveData<Event<Document>>()
-    val openBookDetail: LiveData<Event<Document>>
+    private val _openBookDetail = MutableLiveData<Event<DocumentVo>>()
+    val openBookDetail: LiveData<Event<DocumentVo>>
         get() = _openBookDetail
 
     // 이미 검색중이 항목이 있으면 취소를 위함
@@ -44,7 +45,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     val searchKeyword = MutableLiveData<String>()
 
     // API 요청 모델
-    private val reqModel = KakaoBookReqModel()
+    private val reqModel = KakaoBookReqVo()
 
     // 페이징 가능한 카운트
     private var pageableCount = 0
@@ -86,7 +87,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     }
 
     // 리스트 아이템 클릭
-    fun onBookItemClicked(document: Document) {
+    fun onBookItemClicked(document: DocumentVo) {
         _openBookDetail.value = Event(document.copy())
     }
 
@@ -97,7 +98,7 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
     }
 
     // 상세 정보 반영 (좋아요)
-    fun setDocumentChangeProcess(document: Document) {
+    fun setDocumentChangeProcess(document: DocumentVo) {
         viewModelScope.launch(Dispatchers.Default) {
             (_documents.value ?: listOf()).toMutableList().let { list ->
                 val tempList = list.map {
@@ -122,8 +123,8 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                     _loading.value = true
                 }
                 when (val kakaoBookResult = getSearchBooksUseCase(reqModel.toMap())) {
-                    is Result.Success -> {
-                        val kakaoBook = kakaoBookResult.data
+                    is ResultDto.Success -> {
+                        val kakaoBook = kakaoBookResult.data.toPresenter()
                         if (reqModel.page == 1) {
                             pageableCount = kakaoBook.meta.pageableCount
                         }
@@ -140,11 +141,11 @@ class SearchViewModel @Inject constructor(private val getSearchBooksUseCase: Get
                             _documents.value = itemList
                         }
                     }
-                    is Result.ErrorBody -> {
+                    is ResultDto.ErrorBody -> {
                         onShowToast(R.string.server_error)
                         Timber.d("Result.ErrorBody : ${kakaoBookResult.responseBody}")
                     }
-                    is Result.Error -> {
+                    is ResultDto.Error -> {
                         onShowToast(R.string.error)
                         Timber.d("Result.Error : ${kakaoBookResult.message}")
                     }

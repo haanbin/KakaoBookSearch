@@ -1,6 +1,5 @@
-package com.test.kakaobooksearch.domain
+package com.test.kakaobooksearch
 
-import com.test.kakaobooksearch.data.AppRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 

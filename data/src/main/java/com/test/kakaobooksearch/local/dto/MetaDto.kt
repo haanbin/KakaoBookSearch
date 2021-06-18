@@ -1,4 +1,4 @@
-package com.test.kakaobooksearch.data.local.dto
+package com.test.kakaobooksearch.local.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

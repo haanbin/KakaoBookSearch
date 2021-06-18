@@ -12,7 +12,6 @@ object Constants {
     const val DEFAULT_PAGE_VALUE = 1
     const val DEFAULT_SIZE_VALUE = 50
     const val NETWORK_NEED_SECOND = 60 * 5
-    const val ARG_DOCUMENT = "document"
     const val RESULT_ERROR_NULL = "RESULT_IS_NULL"
     const val RESULT_ERROR_BODY_NULL = "RESULT_IS_NULL"
 }

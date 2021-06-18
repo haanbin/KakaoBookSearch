@@ -8,10 +8,10 @@ import androidx.navigation.fragment.findNavController
 import com.test.kakaobooksearch.BR
 import com.test.kakaobooksearch.R
 import com.test.kakaobooksearch.base.BaseFragment
-import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.databinding.FragmentSearchBinding
 import com.test.kakaobooksearch.ext.keyboardIsVisible
 import com.test.kakaobooksearch.ui.main.MainViewModel
+import com.test.kakaobooksearch.vo.DocumentVo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,7 +54,7 @@ class SearchFragment :
         }
     }
 
-    private fun openBookFragment(document: Document) {
+    private fun openBookFragment(document: DocumentVo) {
         val action = SearchFragmentDirections.nextAction(document)
         findNavController().navigate(action)
     }

@@ -1,7 +1,7 @@
 package com.test.kakaobooksearch.entities
 
 import com.google.gson.annotations.SerializedName
-import com.test.kakaobooksearch.data.local.dto.DocumentDto
+import com.test.kakaobooksearch.local.dto.DocumentDto
 
 data class Document(
     val authors: List<String>,

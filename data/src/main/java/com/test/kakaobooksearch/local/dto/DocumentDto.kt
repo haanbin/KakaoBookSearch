@@ -1,8 +1,8 @@
-package com.test.kakaobooksearch.data.local.dto
+package com.test.kakaobooksearch.local.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.test.kakaobooksearch.data.entities.Document
+import com.test.kakaobooksearch.entities.Document
 
 @Entity(tableName = "DOCUMENT")
 data class DocumentDto(

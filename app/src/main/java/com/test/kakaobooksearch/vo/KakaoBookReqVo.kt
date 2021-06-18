@@ -1,8 +1,8 @@
-package com.test.kakaobooksearch.data.entities
+package com.test.kakaobooksearch.vo
 
 import com.test.kakaobooksearch.util.Constants
 
-data class KakaoBookReqModel(
+data class KakaoBookReqVo(
     var query: String = "",
     val size: Int = Constants.DEFAULT_SIZE_VALUE,
     var page: Int = Constants.DEFAULT_PAGE_VALUE

@@ -3,10 +3,10 @@ package com.test.kakaobooksearch.ext
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.ui.search.SearchAdapter
 import com.test.kakaobooksearch.ui.search.SearchViewModel
 import com.test.kakaobooksearch.util.EndlessRecyclerViewScrollListener
+import com.test.kakaobooksearch.vo.DocumentVo
 
 @BindingAdapter(
     "bind:searchRecyclerViewAttr",
@@ -14,7 +14,7 @@ import com.test.kakaobooksearch.util.EndlessRecyclerViewScrollListener
 )
 fun RecyclerView.setUserRecyclerViewAttr(
     viewModel: SearchViewModel,
-    documents: List<Document>?
+    documents: List<DocumentVo>?
 ) {
     if (itemAnimator != null) {
         itemAnimator = null

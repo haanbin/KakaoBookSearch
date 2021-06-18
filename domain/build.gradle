@@ -3,3 +3,8 @@ plugins {
 }
 
 apply from: "../commons.gradle"
+
+dependencies {
+
+    implementation deps.retrofit.runtime
+}

@@ -1,10 +1,10 @@
 package com.test.kakaobooksearch.local
 
-import com.test.kakaobooksearch.data.entities.Document
-import com.test.kakaobooksearch.data.entities.Meta
-import com.test.kakaobooksearch.data.entities.toDocumentDto
-import com.test.kakaobooksearch.data.local.dto.DocumentDto
-import com.test.kakaobooksearch.data.local.dto.MetaDto
+import com.test.kakaobooksearch.local.dto.DocumentDto
+import com.test.kakaobooksearch.local.dto.MetaDto
+import com.test.kakaobooksearch.entities.Document
+import com.test.kakaobooksearch.entities.Meta
+import com.test.kakaobooksearch.entities.toDocumentDto
 import javax.inject.Inject
 import javax.inject.Singleton
 

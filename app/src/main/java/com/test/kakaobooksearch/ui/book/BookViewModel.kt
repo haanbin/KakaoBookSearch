@@ -4,17 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.test.kakaobooksearch.base.BaseViewModel
-import com.test.kakaobooksearch.data.entities.Document
 import com.test.kakaobooksearch.util.Constants.ARG_DOCUMENT
 import com.test.kakaobooksearch.util.Event
+import com.test.kakaobooksearch.vo.DocumentVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewModel() {
 
-    private val _document = MutableLiveData<Document>()
-    val document: LiveData<Document>
+    private val _document = MutableLiveData<DocumentVo>()
+    val document: LiveData<DocumentVo>
         get() = _document
 
     private val _isLike = MutableLiveData<Boolean>()
@@ -29,12 +29,12 @@ class BookViewModel @Inject constructor(handle: SavedStateHandle) : BaseViewMode
     val openUrlAction: LiveData<Event<String>>
         get() = _openUrlAction
 
-    private val _changeDocumentAction = MutableLiveData<Event<Document>>()
-    val changeDocumentAction: LiveData<Event<Document>>
+    private val _changeDocumentAction = MutableLiveData<Event<DocumentVo>>()
+    val changeDocumentAction: LiveData<Event<DocumentVo>>
         get() = _changeDocumentAction
 
     init {
-        val document = handle.get(ARG_DOCUMENT) as? Document
+        val document = handle.get(ARG_DOCUMENT) as? DocumentVo
         document?.let {
             _document.value = it
             _isLike.value = it.isLike

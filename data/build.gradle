@@ -5,6 +5,7 @@ plugins {
 apply from: "../commons.gradle"
 
 dependencies {
+
     implementation project(':domain')
 
     implementation deps.room.runtime

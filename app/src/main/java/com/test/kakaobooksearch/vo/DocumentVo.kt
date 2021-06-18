@@ -1,18 +1,16 @@
-package com.test.kakaobooksearch.data.entities
+package com.test.kakaobooksearch.vo
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
-import com.test.kakaobooksearch.data.local.dto.DocumentDto
+import com.test.kakaobooksearch.dto.DocumentDto
 
-data class Document(
+data class DocumentVo(
     val authors: List<String>,
     val contents: String,
     val datetime: String,
     val isbn: String,
     val price: String,
     val publisher: String,
-    @SerializedName("sale_price")
     val salePrice: String,
     val status: String,
     val thumbnail: String,
@@ -58,34 +56,33 @@ data class Document(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Document> {
-        override fun createFromParcel(parcel: Parcel): Document {
-            return Document(parcel)
+    companion object CREATOR : Parcelable.Creator<DocumentVo> {
+        override fun createFromParcel(parcel: Parcel): DocumentVo {
+            return DocumentVo(parcel)
         }
 
-        override fun newArray(size: Int): Array<Document?> {
+        override fun newArray(size: Int): Array<DocumentVo?> {
             return arrayOfNulls(size)
         }
     }
 }
 
-fun List<Document>.toDocumentDto(metaId: Long): List<DocumentDto> {
+fun List<DocumentDto>.toPresenter(): List<DocumentVo> {
     return map {
-        DocumentDto(
-            metaId = metaId,
-            authorsSplit = it.authors.joinToString("|"),
-            contents = it.contents,
-            datetime = it.datetime,
-            isbn = it.isbn,
-            isLike = false,
-            price = it.price,
-            publisher = it.publisher,
-            salePrice = it.salePrice,
-            status = it.status,
-            thumbnail = it.thumbnail,
-            title = it.title,
-            translatorSplit = it.translators.joinToString("|"),
-            url = it.url
+        DocumentVo(
+            it.authors,
+            it.contents,
+            it.datetime,
+            it.isbn,
+            it.price,
+            it.publisher,
+            it.salePrice,
+            it.status,
+            it.thumbnail,
+            it.title,
+            it.translators,
+            it.url,
+            it.isLike
         )
     }
 }

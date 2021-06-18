@@ -1,7 +1,7 @@
 package com.test.kakaobooksearch.entities
 
 import com.google.gson.annotations.SerializedName
-import com.test.kakaobooksearch.data.local.dto.MetaDto
+import com.test.kakaobooksearch.local.dto.MetaDto
 
 data class Meta(
     @SerializedName("total_count")
