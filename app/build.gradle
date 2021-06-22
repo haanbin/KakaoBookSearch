@@ -35,5 +35,8 @@ dependencies {
     implementation deps.navigation.fragment
     implementation deps.navigation.ui
 
+    implementation deps.room.runtime
+    kapt deps.room.compiler
+
     implementation deps.timber
 }
