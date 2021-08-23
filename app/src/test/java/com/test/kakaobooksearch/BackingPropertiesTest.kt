@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 
-class ExampleUnitTest {
+class BackingPropertiesTest {
 
     private var _user = User("이름")
     private val user1 = _user
@@ -16,13 +16,20 @@ class ExampleUnitTest {
         get() = _user
 
     @Test
-    fun `Backing Properties 테스트ㄱ`() {
-        println("user1:: $user1")
+    fun test() {
+        println("user1: $user1")
         println("user2: $user2")
         println("_user: 재생성")
         _user = User("이름변경")
-        println("user1:: $user1")
+        println("user1: $user1")
         println("user2: $user2")
+    }
+
+    @Test
+    fun test2() {
+        val instruments = listOf("viola", "cello", "violin")
+        val filtered = instruments.asSequence().filter { it[0] == 'v'}
+        println("filtered: " + filtered) // filtered:
     }
 
     data class User(var name: String)
