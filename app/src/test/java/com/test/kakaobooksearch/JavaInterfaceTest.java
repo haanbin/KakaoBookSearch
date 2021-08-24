@@ -2,8 +2,14 @@ package com.test.kakaobooksearch;
 
 public class JavaInterfaceTest {
 
-    public static void setJavaInterface(JavaInterface javaInterface){
+    private JavaInterface javaInterface;
 
+    public void setJavaInterface(JavaInterface javaInterface) {
+        this.javaInterface = javaInterface;
+    }
+
+    public void callJava(String msg){
+        javaInterface.onJava(msg);
     }
 
     public interface JavaInterface {

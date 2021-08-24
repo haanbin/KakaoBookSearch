@@ -5,23 +5,35 @@ import org.junit.jupiter.api.Test
 class InterfaceTest {
 
     @Test
-    fun test() {
-        val kotlinInterfaceTest = KotlinInterfaceTest()
-        /*kotlinInterfaceTest.setKotlinInterface {
+    fun javaTest() {
+        val javaInterface = JavaInterfaceTest.JavaInterface {
+            println("JavaInterface : $it")
+        }
+        val javaInterfaceTest = JavaInterfaceTest()
+        javaInterfaceTest.setJavaInterface { println("setJavaInterface : $it") }
 
-        }*/
+        javaInterfaceTest.callJava("callJava")
+        javaInterface.onJava("onJava")
+    }
+
+    @Test
+    fun kotlinTest() {
+        val kotlinInterfaceFun = KotlinInterfaceTest.KotlinInterfaceFun {
+            println("kotlinInterfaceFun : $it")
+        }
+
+        val kotlinInterfaceTest = KotlinInterfaceTest()
+        kotlinInterfaceTest.setKotlinInterfaceFun {
+            println("setKotlinInterfaceFun : $it")
+        }
         kotlinInterfaceTest.setKotlinInterface(object : KotlinInterfaceTest.KotlinInterface {
             override fun onKotlin(msg: String) {
-                println("KotlinInterfaceFun : $msg")
+                println("setKotlinInterface : $msg")
             }
         })
-        kotlinInterfaceTest.setKotlinInterfaceFun {
-            println("KotlinInterfaceFun : $it")
-        }
-        kotlinInterfaceTest.setJavaInterface {
-            println("javaInterface : $it")
-        }
-        kotlinInterfaceTest.callInterface()
+
+        kotlinInterfaceFun.onKotlinFun("onKotlinFun")
+        kotlinInterfaceTest.callInterface("callInterface")
     }
 }
 
@@ -29,7 +41,6 @@ class KotlinInterfaceTest {
 
     private var kotlinInterfaceFun: KotlinInterfaceFun? = null
     private var kotlinInterface: KotlinInterface? = null
-    private var javaInterface: JavaInterfaceTest.JavaInterface? = null
 
     fun setKotlinInterfaceFun(kotlinInterfaceFun: KotlinInterfaceFun) {
         this.kotlinInterfaceFun = kotlinInterfaceFun
@@ -39,14 +50,9 @@ class KotlinInterfaceTest {
         this.kotlinInterface = kotlinInterface
     }
 
-    fun setJavaInterface(javaInterface: JavaInterfaceTest.JavaInterface) {
-        this.javaInterface = javaInterface
-    }
-
-    fun callInterface() {
-        kotlinInterfaceFun?.onKotlinFun("kotlinInterfaceFun")
-        kotlinInterface?.onKotlin("kotlinInterface")
-        javaInterface?.onJava("javaInterface")
+    fun callInterface(msg: String) {
+        kotlinInterfaceFun?.onKotlinFun(msg)
+        kotlinInterface?.onKotlin(msg)
     }
 
     fun interface KotlinInterfaceFun {
